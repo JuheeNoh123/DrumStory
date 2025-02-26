@@ -1,9 +1,6 @@
 package drumstory.drumstory.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,5 +8,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Member {
+    @Enumerated(EnumType.STRING)
+    private RoleType role = RoleType.ROLE_MEMBER;
+
+    @Id
+    @GeneratedValue
+    private long id;
+    private String name;
+    private String phoneNumber;
+    private String memberNum;
+
 
 }
