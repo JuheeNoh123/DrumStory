@@ -19,4 +19,11 @@ public class Member {
     private String memberNum;
 
 
+    public Member(String name, String phoneNumber, String memberNum) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.memberNum = memberNum;
+    }
+
+
 }
