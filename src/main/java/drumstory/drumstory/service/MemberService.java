@@ -25,7 +25,7 @@ public class MemberService {
     public MemberDTO.ResponseLogin login(MemberDTO.MemberInfo request){
         Member member = findByMemberNum(request.getMemberNum());
         if (member == null) {
-            throw new MemberLoginException("회원ID를 확인해주세요.", HttpStatus.BAD_REQUEST);
+            throw new MemberLoginException("등록되지 않은 ID 입니다.", HttpStatus.BAD_REQUEST);
         }
         return new MemberDTO.ResponseLogin(jwtUtility.generateToken(member.getMemberNum()), member.getRole());
     }

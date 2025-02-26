@@ -6,4 +6,6 @@ public interface MemberInterface {
     public Member findById(Long Id);
 
     public Member findByMemberNum(String memberNum);
+
+    public void save(Member member);
 }

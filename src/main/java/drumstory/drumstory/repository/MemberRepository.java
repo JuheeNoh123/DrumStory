@@ -26,4 +26,9 @@ public class MemberRepository implements MemberInterface{
         }
     }
 
+    @Override
+    public void save(Member member) {
+        em.persist(member);
+    }
+
 }
