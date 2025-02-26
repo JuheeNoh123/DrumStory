@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 인증객체 생성
     private Authentication getAuthentication(String token) {
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(jwtUtility.getStudentId(token));
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(jwtUtility.getMemberNum(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 }

@@ -31,7 +31,7 @@ public class JwtUtility {
     }
 
     // JWT 클레임 반환
-    public String getStudentId(String token) {
+    public String getMemberNum(String token) {
         // 토큰 파싱 및 클레임 반환
         return Jwts.parser()
                 .setSigningKey(secret)
