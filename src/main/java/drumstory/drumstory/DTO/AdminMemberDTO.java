@@ -7,7 +7,7 @@ public class AdminMemberDTO {
     public static class AdminCreateMemberDTO {
         private String name;
         private String phoneNumber;
-        private String memberId;
+        private String memberNum;
     }
 
 
