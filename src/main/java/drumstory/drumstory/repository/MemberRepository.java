@@ -1,6 +1,7 @@
 package drumstory.drumstory.repository;
 
 import drumstory.drumstory.domain.Member;
+import drumstory.drumstory.domain.RoleType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class MemberRepository implements MemberInterface{
 
     @Override
     public List<Member> findAll() {
-        String roleMember = "ROLE_MEMBER";
+        RoleType roleMember = RoleType.ROLE_MEMBER;
         return em.createQuery("SELECT m FROM Member m where m.role=:roleMember", Member.class)
                 .setParameter("roleMember", roleMember)
                 .getResultList();
