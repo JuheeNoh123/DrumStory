@@ -49,11 +49,11 @@ public class JwtUtility {
                     .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            System.out.println("Token expired");
+            System.out.println("Token expired: " + e.getMessage());
         } catch (SignatureException e) {
-            System.out.println("Invalid signature");
+            System.out.println("Invalid signature: " + e.getMessage());
         } catch (MalformedJwtException e) {
-            System.out.println("Invalid token");
+            System.out.println("Invalid token: " + e.getMessage());
         }
         return false;
     }

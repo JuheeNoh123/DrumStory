@@ -1,5 +1,6 @@
 package drumstory.drumstory.controller;
 import drumstory.drumstory.exception.DuplicatedMemberIdException;
+import drumstory.drumstory.exception.ReservateException;
 import drumstory.drumstory.exception.MemberLoginException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,12 @@ public class GlobalExceptionController {
     //로그인 실패 시 "등록되지 않은 ID 입니다." , 400 에러 반환
     @ExceptionHandler(MemberLoginException.class)
     public ResponseEntity<String> handleMemberLoginException(MemberLoginException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+    }
+
+    //로그인 실패 시 "등록되지 않은 ID 입니다." , 400 에러 반환
+    @ExceptionHandler(ReservateException.class)
+    public ResponseEntity<String> ReservateException(ReservateException e) {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
