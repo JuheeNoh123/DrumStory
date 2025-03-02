@@ -6,6 +6,8 @@ import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository implements MemberInterface{
@@ -29,6 +31,14 @@ public class MemberRepository implements MemberInterface{
     @Override
     public void save(Member member) {
         em.persist(member);
+    }
+
+    @Override
+    public List<Member> findAll() {
+        String roleMember = "ROLE_MEMBER";
+        return em.createQuery("SELECT m FROM Member m where m.role=:roleMember", Member.class)
+                .setParameter("roleMember", roleMember)
+                .getResultList();
     }
 
 }

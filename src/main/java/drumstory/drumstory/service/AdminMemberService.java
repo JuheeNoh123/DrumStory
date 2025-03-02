@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,4 +26,10 @@ public class AdminMemberService {
 
         return member;
     }
+
+    public List<Member> findAll(){
+        return memberRepository.findAll();
+    }
+
+
 }
