@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,7 +28,7 @@ public class AdminMemberController {
     @PostMapping("/admin/member/add")
     public ResponseEntity<AdminMemberDTO.AddMemberResponse> addMember(@RequestBody AdminMemberDTO.AdminCreateMemberDTO request){
         Member member = adminMemberService.add(request.getName(), request.getPhoneNumber(), request.getMemberNum());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AdminMemberDTO.AddMemberResponse(member.getMemberNum(), member.getName(), member.getRole()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AdminMemberDTO.AddMemberResponse(member.getMemberNum(), member.getName(), member.getPhoneNumber()));
     }
 
     @Operation(summary = "회원 조회(선우)", description = "토큰 필요",
@@ -40,4 +37,15 @@ public class AdminMemberController {
     public List<Member> getAllMembers(){
         return adminMemberService.findAll();
     }
+
+    @Operation(summary = "회원 정보 수정(선우)", description = "토큰 필요",
+            responses = {@ApiResponse(responseCode = "201", description = "수정"),
+                    @ApiResponse(responseCode = "409", description = "중복 ID임")})
+    @PutMapping("/admin/member/update")
+    public ResponseEntity<AdminMemberDTO.UpdateMemberResponse> updateMember(@RequestBody AdminMemberDTO.AdminUpdateMemberDTO request){
+        Member member = adminMemberService.update(request.getOldMemberNum(), request.getName(), request.getPhoneNumber(), request.getMemberNum());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AdminMemberDTO.UpdateMemberResponse(member.getMemberNum(), member.getName(), member.getPhoneNumber()));
+    }
+
+
 }

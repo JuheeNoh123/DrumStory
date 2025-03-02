@@ -3,6 +3,7 @@ package drumstory.drumstory.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -14,8 +15,12 @@ public class Member {
     @Id
     @GeneratedValue
     private long Id;
+    @Setter
     private String name;
+    @Setter
     private String phoneNumber;
+    @Column(unique = true)
+    @Setter
     private String memberNum;
 
     public Member(String name, String phoneNumber, String memberNum) {
