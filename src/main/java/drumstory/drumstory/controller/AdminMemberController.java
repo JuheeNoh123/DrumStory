@@ -34,6 +34,8 @@ public class AdminMemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new AdminMemberDTO.AddMemberResponse(member.getMemberNum(), member.getName(), member.getRole()));
     }
 
+    @Operation(summary = "회원 조회(선우)", description = "토큰 필요",
+            responses = {@ApiResponse(responseCode = "200", description = "조회")})
     @GetMapping("/admin/member")
     public List<Member> getAllMembers(){
         return adminMemberService.findAll();
