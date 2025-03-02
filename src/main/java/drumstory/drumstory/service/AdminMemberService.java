@@ -31,5 +31,30 @@ public class AdminMemberService {
         return memberRepository.findAll();
     }
 
+    @Transactional
+    public Member update(String oldMemberNum, String name, String phoneNumber, String memberNum) {
+        Member member = memberRepository.findByMemberNum(oldMemberNum);
+
+        if(memberRepository.findByMemberNum(memberNum)!=null && !memberNum.equals(oldMemberNum)){
+            throw new DuplicatedMemberIdException("회원 ID가 이미 존재합니다.", HttpStatus.CONFLICT); //409 conflict 에러 반환
+        }
+        member.setMemberNum(memberNum);
+        member.setName(name);
+        member.setPhoneNumber(phoneNumber);
+        return member;
+
+    }
+
+    @Transactional
+    public Member delete(String memberNum){
+        if(memberRepository.findByMemberNum(memberNum)==null){
+            throw new DuplicatedMemberIdException("회원 ID가 없습니다", HttpStatus.CONFLICT); //409 conflict 에러 반환
+        }
+        Member member = memberRepository.findByMemberNum(memberNum);
+        memberRepository.delete(member);
+
+        return member;
+    }
+
 
 }
