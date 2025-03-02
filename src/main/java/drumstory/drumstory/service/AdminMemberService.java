@@ -44,4 +44,17 @@ public class AdminMemberService {
         return member;
 
     }
+
+    @Transactional
+    public Member delete(String memberNum){
+        if(memberRepository.findByMemberNum(memberNum)==null){
+            throw new DuplicatedMemberIdException("회원 ID가 없습니다", HttpStatus.CONFLICT); //409 conflict 에러 반환
+        }
+        Member member = memberRepository.findByMemberNum(memberNum);
+        memberRepository.delete(member);
+
+        return member;
+    }
+
+
 }

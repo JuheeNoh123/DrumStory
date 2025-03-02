@@ -39,12 +39,21 @@ public class AdminMemberController {
     }
 
     @Operation(summary = "회원 정보 수정(선우)", description = "토큰 필요",
-            responses = {@ApiResponse(responseCode = "201", description = "수정"),
+            responses = {@ApiResponse(responseCode = "200", description = "수정"),
                     @ApiResponse(responseCode = "409", description = "중복 ID임")})
     @PutMapping("/admin/member/update")
     public ResponseEntity<AdminMemberDTO.UpdateMemberResponse> updateMember(@RequestBody AdminMemberDTO.AdminUpdateMemberDTO request){
         Member member = adminMemberService.update(request.getOldMemberNum(), request.getName(), request.getPhoneNumber(), request.getMemberNum());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AdminMemberDTO.UpdateMemberResponse(member.getMemberNum(), member.getName(), member.getPhoneNumber()));
+        return ResponseEntity.status(HttpStatus.OK).body(new AdminMemberDTO.UpdateMemberResponse(member.getMemberNum(), member.getName(), member.getPhoneNumber()));
+    }
+
+    @Operation(summary = "회원 정보 수정(선우)", description = "토큰 필요",
+            responses = {@ApiResponse(responseCode = "200", description = "삭제"),
+                    @ApiResponse(responseCode = "409", description = "없는 ID임")})
+    @DeleteMapping("/admin/member/delete")
+    public ResponseEntity<AdminMemberDTO.DeleteMemberResponse> deleteMember(@RequestBody AdminMemberDTO.AdminDeleteMemberDTO request){
+        Member member = adminMemberService.delete(request.getMemberNum());
+        return ResponseEntity.status(HttpStatus.OK).body(new AdminMemberDTO.DeleteMemberResponse(member.getMemberNum(), member.getName(), member.getPhoneNumber()));
     }
 
 

@@ -12,4 +12,6 @@ public interface MemberInterface {
     public void save(Member member);
 
     public List<Member> findAll();
+
+    void delete(Member member);
 }

@@ -60,5 +60,29 @@ public class AdminMemberDTO {
         }
     }
 
+    @Data
+    public static class DeleteMemberResponse {
+        @Schema(description = "회원ID", example = "0000")
+        private String memberNum;
+        @Schema(description = "이름", example = "홍길동")
+        private String name;
+        @Schema(description = "전화번호", example = "01012345678")
+        private String phoneNumber;
+
+        public DeleteMemberResponse(String memberNum, String name, String phoneNumber) {
+            this.memberNum = memberNum;
+            this.name = name;
+            this.phoneNumber = phoneNumber;
+        }
+    }
+
+    @Data
+    public static class AdminDeleteMemberDTO {
+        @Schema(description = "회원ID", example = "1234")
+        private String memberNum;
+    }
+
+
+
 
 }

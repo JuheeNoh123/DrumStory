@@ -42,4 +42,9 @@ public class MemberRepository implements MemberInterface{
                 .getResultList();
     }
 
+    @Override
+    public void delete(Member member) {
+        em.remove(member);
+    }
+
 }
