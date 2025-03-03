@@ -3,9 +3,8 @@ package drumstory.drumstory.service;
 import drumstory.drumstory.DTO.MemberDTO;
 import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
-import drumstory.drumstory.domain.Reservation;
 import drumstory.drumstory.exception.ReservateException;
-import drumstory.drumstory.exception.MemberLoginException;
+import drumstory.drumstory.exception.UnregisteredMemberIdException;
 import drumstory.drumstory.repository.MemberInterface;
 import drumstory.drumstory.repository.ReservationInterface;
 import drumstory.drumstory.security.JwtUtility;
@@ -35,7 +34,7 @@ public class MemberService {
         if (member != null) {
             return member;
         } else {
-            throw new MemberLoginException("회원만 이용 가능합니다.\n회원 번호를 확인해주세요.", HttpStatus.UNAUTHORIZED);
+            throw new UnregisteredMemberIdException("회원만 이용 가능합니다.\n회원 번호를 확인해주세요.", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -46,7 +45,7 @@ public class MemberService {
     public MemberDTO.ResponseLogin login(MemberDTO.MemberInfo request){
         Member member = findByMemberNum(request.getMemberNum());
         if (member == null) {
-            throw new MemberLoginException("등록되지 않은 ID 입니다.", HttpStatus.BAD_REQUEST);
+            throw new UnregisteredMemberIdException("등록되지 않은 ID 입니다.", HttpStatus.BAD_REQUEST);
         }
         return new MemberDTO.ResponseLogin(jwtUtility.generateToken(member.getMemberNum()), member.getRole());
     }
@@ -87,7 +86,8 @@ public class MemberService {
         // 예약 끝 시간 계산 (30분 추가)
         LocalTime endTimeObj = eTime.plusMinutes(30);
         String endTime = formatToAmPm(endTimeObj);
-        return new ReservationDTO.ReservateTimeRes(member.getName(),times,time1, endTime,resDate);
+        String day = resDate.getDayOfWeek().toString();
+        return new ReservationDTO.ReservateTimeRes(member.getName(),times,time1, endTime,resDate,day);
 
     }
 
