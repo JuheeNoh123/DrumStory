@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "AvailableTime")
+@Entity(name = "available_time")
 @Getter
 @NoArgsConstructor
 public class AvailableTime {
