@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class ReservationService {
     private final ReservationInterface reservationInterface;
     private final RoomInterface roomInterface;
