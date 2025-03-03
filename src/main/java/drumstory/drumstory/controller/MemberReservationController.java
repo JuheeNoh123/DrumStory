@@ -12,9 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,5 +43,13 @@ public class MemberReservationController {
         Member member = memberService.tokenToMember(header);
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.saveReservationTimeRoom(member,request.getTimes(),request.getResDate(),request.getRoomNum()));
 
+    }
+
+    @Operation(summary = "해당 날짜에 예약 가능한 시간 조회(주희)", description = "해더에 토큰 필요",
+            responses = {@ApiResponse(responseCode = "200", description = "이미 예약 된 시간 제외하고 현재 16:10분이면 16:00부터 조회")})
+    @PostMapping("/reservation")
+    public ResponseEntity<ReservationDTO.AvailableTimesAndMember> AvailableTimes(HttpServletRequest header, @RequestBody ReservationDTO.DateReq req) {
+        Member member = memberService.tokenToMember(header);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReservationDTO.AvailableTimesAndMember(member.getName(), reservationService.findAvailableTimes(req.getDate())));
     }
 }
