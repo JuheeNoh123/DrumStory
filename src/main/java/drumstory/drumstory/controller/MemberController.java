@@ -51,4 +51,7 @@ public class MemberController {
         ReservationDTO.ReservateTimeRes reservateTimeres = memberService.reservateTime(member, request.getTimes(), request.getResDate());
         return ResponseEntity.status(HttpStatus.OK).body(reservateTimeres);
     }
+
+
+
 }
