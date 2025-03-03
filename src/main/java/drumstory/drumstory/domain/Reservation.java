@@ -39,7 +39,7 @@ public class Reservation {
     private LocalDateTime updateTime;
 
 
-    public Reservation(LocalDate resDate, TimeTable time1, TimeTable time2, Member member, Room room) {
+    public Reservation(LocalDate resDate, TimeTable time, Member member, Room room) {
         this.resDate = resDate;
         this.time = time;
         this.member = member;
