@@ -22,12 +22,8 @@ public class Reservation {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "time_table_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private TimeTable time1;
+    private TimeTable time;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "time_table_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private TimeTable time2;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -45,8 +41,7 @@ public class Reservation {
 
     public Reservation(LocalDate resDate, TimeTable time1, TimeTable time2, Member member, Room room) {
         this.resDate = resDate;
-        this.time1 = time1;
-        this.time2 = time2;
+        this.time = time;
         this.member = member;
         this.room = room;
     }

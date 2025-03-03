@@ -117,14 +117,7 @@ public class ReservationService {
         LocalDate resDate = LocalDate.parse(date);
         String time1;
         String time2;
-        if (times.size() == 1) {
-            time1 = separateAMPM(times.getFirst());
-            time2 = null;
-        }
-        else{
-            time1 = separateAMPM(times.get(0));
-            time2 = separateAMPM(times.get(1));
-        }
+
 
 
 
@@ -135,19 +128,5 @@ public class ReservationService {
         return null;
     }
 
-    public List<TimeTable> getAvailableTimes(){
-        LocalTime now = LocalTime.now();
-        List<TimeTable> availableTimes = reservationInterface.getTimeTable();
-        List<Reservation> reservations = reservationInterface.getAllReservations();
-        System.out.println(now);
 
-        System.out.println("Available Times:");
-        availableTimes.forEach(time -> System.out.println("id: " + time.getId() + ", times: " + time.getTimeTable()));
-
-        System.out.println("Reservations:");
-        reservations.forEach(res -> System.out.println("id: " + res.getId() + ", user: " + res.getTime1() + ", EndTime: " + res.getTime2()));
-
-        return null;
-
-    }
 }

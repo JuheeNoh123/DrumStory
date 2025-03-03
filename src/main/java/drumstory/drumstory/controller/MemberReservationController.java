@@ -25,12 +25,6 @@ public class MemberReservationController {
     private final MemberService memberService;
     private final ReservationService reservationService;
 
-    @GetMapping("/schedule")
-    public List<ReservationDTO.ScheduleRes> getSchedule(HttpServletRequest header) {
-
-        reservationService.getAvailableTimes();
-        return null;
-    }
 
     @Operation(summary = "시간 예약 (주희)", description = "해더에 토큰 필요",
             responses = {@ApiResponse(responseCode = "200", description = "시간 선택 완료"),
