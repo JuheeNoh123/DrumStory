@@ -4,7 +4,6 @@ import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.service.MemberService;
 import drumstory.drumstory.service.ReservationService;
-import drumstory.drumstory.service.TimeTable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +24,7 @@ import java.util.List;
 public class MemberReservationController {
     private final MemberService memberService;
     private final ReservationService reservationService;
-    private final TimeTable availableTime;
 
-    @GetMapping("/schedule")
-    public List<ReservationDTO.ScheduleRes> getSchedule(HttpServletRequest header) {
-
-        availableTime.getAvailableTimes();
-        return null;
-    }
 
     @Operation(summary = "시간 예약 (주희)", description = "해더에 토큰 필요",
             responses = {@ApiResponse(responseCode = "200", description = "시간 선택 완료"),

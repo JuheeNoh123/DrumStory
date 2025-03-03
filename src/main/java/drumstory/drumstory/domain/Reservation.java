@@ -8,8 +8,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
 
 import static jakarta.persistence.FetchType.LAZY;
 @Entity
@@ -21,10 +19,11 @@ public class Reservation {
     private long Id;
 
     private LocalDate resDate;
-    @Column(name="time1")
-    private LocalTime time1;
-    @Column(name="time2")
-    private LocalTime time2;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "time_table_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private TimeTable time;
+
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -40,10 +39,9 @@ public class Reservation {
     private LocalDateTime updateTime;
 
 
-    public Reservation(LocalDate resDate, LocalTime time1, LocalTime time2, Member member, Room room) {
+    public Reservation(LocalDate resDate, TimeTable time1, TimeTable time2, Member member, Room room) {
         this.resDate = resDate;
-        this.time1 = time1;
-        this.time2 = time2;
+        this.time = time;
         this.member = member;
         this.room = room;
     }

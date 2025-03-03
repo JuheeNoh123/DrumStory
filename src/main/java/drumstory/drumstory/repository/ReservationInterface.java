@@ -1,18 +1,22 @@
 package drumstory.drumstory.repository;
 
-import drumstory.drumstory.domain.AvailableTime;
+
 import drumstory.drumstory.domain.Reservation;
-import drumstory.drumstory.service.TimeTable;
+import drumstory.drumstory.domain.TimeTable;
 
 import java.util.List;
 
 public interface ReservationInterface {
 
-    List<AvailableTime> getAvailableTimes();
+
+
+    List<TimeTable> getTimeTable();
 
     List<Reservation> getAllReservations();
 
     Reservation saveReservation(Reservation reservation);
+
+    TimeTable getTimeTableByTime(String reservationTime);
 
     List<Reservation> findAll();
 }
