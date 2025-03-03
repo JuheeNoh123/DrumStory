@@ -3,7 +3,7 @@ package drumstory.drumstory.service;
 import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
-import drumstory.drumstory.domain.TImeTable;
+import drumstory.drumstory.domain.TimeTable;
 import drumstory.drumstory.exception.ReservateException;
 import drumstory.drumstory.repository.ReservationInterface;
 import lombok.RequiredArgsConstructor;
@@ -137,7 +137,7 @@ public class ReservationService {
 
     public List<TimeTable> getAvailableTimes(){
         LocalTime now = LocalTime.now();
-        List<TImeTable> availableTimes = reservationInterface.getTimeTable();
+        List<TimeTable> availableTimes = reservationInterface.getTimeTable();
         List<Reservation> reservations = reservationInterface.getAllReservations();
         System.out.println(now);
 

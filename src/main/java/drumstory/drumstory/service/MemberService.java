@@ -1,10 +1,7 @@
 package drumstory.drumstory.service;
 
 import drumstory.drumstory.DTO.MemberDTO;
-import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
-import drumstory.drumstory.domain.Reservation;
-import drumstory.drumstory.exception.ReservateException;
 import drumstory.drumstory.exception.UnregisteredMemberIdException;
 import drumstory.drumstory.repository.MemberInterface;
 import drumstory.drumstory.repository.ReservationInterface;
@@ -13,15 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Duration;
-import java.util.List;
-
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Service

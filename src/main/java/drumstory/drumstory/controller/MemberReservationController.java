@@ -4,7 +4,6 @@ import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.service.MemberService;
 import drumstory.drumstory.service.ReservationService;
-import drumstory.drumstory.service.TimeTable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,7 +24,6 @@ import java.util.List;
 public class MemberReservationController {
     private final MemberService memberService;
     private final ReservationService reservationService;
-    private final TimeTable timeTable;
 
     @GetMapping("/schedule")
     public List<ReservationDTO.ScheduleRes> getSchedule(HttpServletRequest header) {

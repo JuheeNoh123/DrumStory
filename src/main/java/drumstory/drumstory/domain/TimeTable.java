@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "time_table")
 @Getter
 @NoArgsConstructor
-public class TImeTable {
+public class TimeTable {
     @Id
     private int Id;
     private String timeTable;
