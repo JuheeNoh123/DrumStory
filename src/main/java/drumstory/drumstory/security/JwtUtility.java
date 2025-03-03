@@ -7,18 +7,20 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 
 @Service
 public class JwtUtility {
-
-    private final Key secret;
+    @Value("${jwt.secret}") // application.yml 또는 properties에서 주입
+    private String secret;
+    //private final Key secret;
     private static final long expirationTime = 1000 * 60 * 60; // 1시간
-    public JwtUtility() {
-        this.secret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    }
+//    public JwtUtility() {
+//        this.secret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+//    }
 
     // JWT 생성
     public String generateToken(String memberId) {
@@ -26,7 +28,7 @@ public class JwtUtility {
                 .setSubject(memberId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(secret)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
