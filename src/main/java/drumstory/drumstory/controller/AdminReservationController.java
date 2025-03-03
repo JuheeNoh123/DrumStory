@@ -1,6 +1,7 @@
 package drumstory.drumstory.controller;
 
 
+import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
 import drumstory.drumstory.service.AdminMemberService;
@@ -10,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,8 +27,8 @@ public class AdminReservationController {
 
     @Operation(summary = "예약 조회(선우)", description = "토큰 필요",
             responses = {@ApiResponse(responseCode = "200", description = "조회")})
-    @GetMapping("/admin/reservation")
-    public List<Reservation> getAllReservations(){
-        return reservationService.findAll();
+    @PostMapping("/admin/reservation")
+    public List<ReservationDTO.ReservationListRes> getAllReservations(@RequestBody ReservationDTO.ReservationListReq req){
+        return reservationService.findAll(req.getResDate());
     }
 }
