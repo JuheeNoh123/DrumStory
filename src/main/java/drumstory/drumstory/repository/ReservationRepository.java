@@ -1,6 +1,7 @@
 package drumstory.drumstory.repository;
 
 import drumstory.drumstory.domain.AvailableTime;
+import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -27,4 +28,11 @@ public class ReservationRepository implements ReservationInterface{
         em.persist(reservation);
         return reservation;
     }
+
+    @Override
+    public List<Reservation> findAll() {
+        return em.createQuery("SELECT m FROM Reservation m", Reservation.class)
+                .getResultList();
+    }
+
 }

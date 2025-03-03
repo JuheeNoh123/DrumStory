@@ -13,4 +13,6 @@ public interface ReservationInterface {
     List<Reservation> getAllReservations();
 
     Reservation saveReservation(Reservation reservation);
+
+    List<Reservation> findAll();
 }
