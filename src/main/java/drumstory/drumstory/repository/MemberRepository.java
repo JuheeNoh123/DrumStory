@@ -29,6 +29,8 @@ public class MemberRepository implements MemberInterface{
         }
     }
 
+
+
     @Override
     public void save(Member member) {
         em.persist(member);
@@ -45,6 +47,18 @@ public class MemberRepository implements MemberInterface{
     @Override
     public void delete(Member member) {
         em.remove(member);
+    }
+
+    @Override
+    public String getMemberName(String memberNum) {
+        try {
+            Member member = em.createQuery("SELECT m FROM Member m WHERE m.memberNum = :memberNum", Member.class)
+                    .setParameter("memberNum", memberNum)
+                    .getSingleResult();
+            return member.getMemberNum();
+        } catch (NoResultException e) {
+            return null; // 결과가 없으면 null 반환
+        }
     }
 
 }
