@@ -24,7 +24,7 @@ public class ReservationDTO {
 
     @Data
     @AllArgsConstructor
-    public static class ReservateTimeRes {
+    public static class ReservationTimeRes {
         @Schema(description = "예약자명", example = "노주희")
         private String name;
         @Schema(description = "선택한 예약 시간 리스트", example = "오전 HH:MM")
@@ -41,19 +41,19 @@ public class ReservationDTO {
     }
 
     @Data
-    public static class ReservateTimeRoomReq {
+    public static class ReservationTimeRoomReq {
         @Schema(description = "예약 시간 리스트", example = "[ \"오전 HH:MM\",\"오후 HH:MM\"]")
         private List<String> times;
         @Schema(description = "예약날짜", example = "YYYY-MM-DD")
         private String resDate;
         @Schema(description = "예약한 방", example = "1")
-        private int roomNum;
+        private String roomNum;
     }
 
 
     @Data
     @AllArgsConstructor
-    public static class ReservateTimeRoomRes {
+    public static class ReservationTimeRoomRes {
         @Schema(description = "예약자명", example = "노주희")
         private String name;
 //        @Schema(description = "선택한 예약 시간 리스트", example = "오전 HH:MM")
@@ -67,6 +67,6 @@ public class ReservationDTO {
         @Schema(description = "예약요일", example = "Monday")
         private String resDay;
         @Schema(description = "예약한 방", example = "1")
-        private int roomNum;
+        private String roomNum;
     }
 }
