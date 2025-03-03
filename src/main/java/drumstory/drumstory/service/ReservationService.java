@@ -5,7 +5,6 @@ import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
 import drumstory.drumstory.exception.ReservateException;
 import drumstory.drumstory.repository.ReservationInterface;
-import drumstory.drumstory.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ import java.util.List;
 public class ReservationService {
     private final ReservationInterface reservationInterface;
     @Transactional
-    public ReservationDTO.ReservateTimeRes reservateTime(Member member, List<String> times, String date){
+    public ReservationDTO.ReservateTimeRes reservationTime(Member member, List<String> times, String date){
         LocalDate resDate = LocalDate.parse(date);
         if (times.size() > 2) {
             throw new ReservateException("최대 두 개의 시간만 선택할 수 있습니다.", HttpStatus.BAD_REQUEST);
@@ -109,7 +108,7 @@ public class ReservationService {
         return String.format("%02d:%02d", hour, minute);
     }
 
-    public Reservation saveReservateTimeRoom(Member member, List<String> times, String date, int roomNum) {
+    public Reservation saveReservationTimeRoom(Member member, List<String> times, String date, int roomNum) {
         LocalDate resDate = LocalDate.parse(date);
         String time1;
         String time2;

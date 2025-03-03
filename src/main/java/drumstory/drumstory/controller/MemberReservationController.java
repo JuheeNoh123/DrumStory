@@ -38,14 +38,14 @@ public class MemberReservationController {
             responses = {@ApiResponse(responseCode = "200", description = "시간 선택 완료"),
                     @ApiResponse(responseCode = "400", description = "1. 최대 두 개의 시간만 선택 가능 <br>2. 예약 시간을 선택해주세요(빈 리스트 일 경우)<br>3. 연속된 시간으로만 선택 가능합니다"),
             })
-    @PostMapping("/reservate/time")
-    public ResponseEntity<ReservationDTO.ReservateTimeRes> ReservateTime(HttpServletRequest header, @RequestBody ReservationDTO.ReservateTimeReq request ) {
+    @PostMapping("/reservation/time")
+    public ResponseEntity<ReservationDTO.ReservateTimeRes> ReservationTime(HttpServletRequest header, @RequestBody ReservationDTO.ReservateTimeReq request ) {
         Member member = memberService.tokenToMember(header);
-        ReservationDTO.ReservateTimeRes reservateTimeres = reservationService.reservateTime(member, request.getTimes(), request.getResDate());
+        ReservationDTO.ReservateTimeRes reservateTimeres = reservationService.reservationTime(member, request.getTimes(), request.getResDate());
         return ResponseEntity.status(HttpStatus.OK).body(reservateTimeres);
     }
 
-    @PostMapping("/reservate/room")
+    @PostMapping("/reservation/room")
     public  ResponseEntity<ReservationDTO.ReservateTimeRoomRes> saveReservation(HttpServletRequest header, @RequestBody ReservationDTO.ReservateTimeRoomReq request) {
         Member member = memberService.tokenToMember(header);
         return null;
