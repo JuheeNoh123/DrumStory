@@ -1,6 +1,7 @@
 package drumstory.drumstory.service;
 
 import drumstory.drumstory.DTO.MemberDTO;
+import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
 import drumstory.drumstory.exception.ReservateException;
@@ -51,22 +52,31 @@ public class MemberService {
     }
 
     @Transactional
-    public Reservation reservation(Member member, List<String> times, String date){
+    public ReservationDTO.ReservateTimeRes reservateTime(Member member, List<String> times, String date){
         LocalDate resDate = LocalDate.parse(date);
         if (times.size() > 2) {
             throw new ReservateException("최대 두 개의 시간만 선택할 수 있습니다.",HttpStatus.BAD_REQUEST);
         }
-
-        // 오전/오후를 분리하여 처리
-        String time1 = times.get(0).trim(); // 앞뒤 공백 제거
-        String time2 = times.get(1).trim();     // 앞뒤 공백 제거
-
-        time1 = convertTo24HourTime(time1); // 12시간제를 24시간제로 변환
-        time2 = convertTo24HourTime(time2);     // 12시간제를 24시간제로 변환
+        if (times.isEmpty()) {
+            throw new ReservateException("예약 시간을 선택해주세요",HttpStatus.BAD_REQUEST);
+        }
+        String time1;
+        String time2;
+        if (times.size() == 2) {
+            // 오전/오후를 분리하여 처리
+            time1 = times.get(0).trim(); // 앞뒤 공백 제거, 12시간제를 24시간제로 변환
+            time2 = times.get(1).trim();     // 앞뒤 공백 제거, 12시간제를 24시간제로 변환
+        }
+        else {
+            time1 = times.getFirst().trim();
+            time2 = time1;
+        }
+        String time1_24 = convertTo24HourTime(time1);
+        String time2_24 = convertTo24HourTime(time2);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime sTime = LocalTime.parse(time1, formatter);
-        LocalTime eTime = LocalTime.parse(time2, formatter);
+        LocalTime sTime = LocalTime.parse(time1_24, formatter);
+        LocalTime eTime = LocalTime.parse(time2_24, formatter);
 
         // 첫타임,두번째 타임 차이가 30이 아닐때 (연속안됐을떄)
         if (Duration.between(sTime, eTime).toMinutes() > 30) {
@@ -74,9 +84,33 @@ public class MemberService {
         }
 
 
-        Reservation reservation = new Reservation(resDate,sTime,eTime,member);
-        return reservationInterface.saveReservation(reservation);
+        // 예약 끝 시간 계산 (30분 추가)
+        LocalTime endTimeObj = eTime.plusMinutes(30);
+        String endTime = formatToAmPm(endTimeObj);
+        return new ReservationDTO.ReservateTimeRes(member.getName(),times,time1, endTime,resDate);
 
+    }
+
+    private String formatToAmPm(LocalTime time) {
+        int hour = time.getHour();
+        int minute = time.getMinute();
+
+        String period = (hour < 12) ? "오전" : "오후";
+
+        // 24시간제를 12시간제로 변환
+        int hour12;
+        if (hour == 0) {
+            // 24시간제에서 0시는 12시(자정)로 변환
+            hour12 = 12;
+        } else if (hour > 12) {
+            // 오후 시간 (13~23시)는 12를 빼서 12시간제로 변환
+            hour12 = hour - 12;
+        } else {
+            // 나머지는 그대로 사용 (1~12시)
+            hour12 = hour;
+        }
+
+        return String.format("%s %02d:%02d", period, hour12, minute);
     }
 
 

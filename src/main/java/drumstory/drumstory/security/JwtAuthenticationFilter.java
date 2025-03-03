@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         if (path.startsWith("/login") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
-            // 경로가 /admin/**가 아닌 경우, 필터를 통과시킴
             filterChain.doFilter(request, response);
             return;
         }

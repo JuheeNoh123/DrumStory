@@ -26,7 +26,7 @@ public class TimeTable {
         availableTimes.forEach(time -> System.out.println("id: " + time.getId() + ", times: " + time.getAva_time()));
 
         System.out.println("Reservations:");
-        reservations.forEach(res -> System.out.println("id: " + res.getId() + ", user: " + res.getStartTime() + ", EndTime: " + res.getEndTime()));
+        reservations.forEach(res -> System.out.println("id: " + res.getId() + ", user: " + res.getTime1() + ", EndTime: " + res.getTime2()));
 
         return null;
 

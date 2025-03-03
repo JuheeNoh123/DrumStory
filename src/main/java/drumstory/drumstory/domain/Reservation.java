@@ -21,22 +21,31 @@ public class Reservation {
     private long Id;
 
     private LocalDate resDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
-
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
+    @Column(name="time1")
+    private LocalTime time1;
+    @Column(name="time2")
+    private LocalTime time2;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
-    public Reservation(LocalDate resDate, LocalTime startTime, LocalTime endTime, Member member) {
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name="room_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Room room;
+
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+
+
+    public Reservation(LocalDate resDate, LocalTime time1, LocalTime time2, Member member, Room room) {
         this.resDate = resDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.time1 = time1;
+        this.time2 = time2;
         this.member = member;
+        this.room = room;
     }
 
     // 엔티티가 처음 저장될 때 createTime을 설정
