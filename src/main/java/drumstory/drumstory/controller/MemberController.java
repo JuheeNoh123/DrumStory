@@ -33,7 +33,8 @@ public class MemberController {
     }
 
     @GetMapping("/schedule")
-    public List<ReservationDTO.ScheduleRes> getSchedule() {
+    public List<ReservationDTO.ScheduleRes> getSchedule(HttpServletRequest header) {
+
         availableTime.getAvailableTimes();
         return null;
     }
@@ -42,7 +43,7 @@ public class MemberController {
             responses = {@ApiResponse(responseCode = "201", description = "예약 성공"),
                     @ApiResponse(responseCode = "400", description = "1시간 초과로 시간 선택")})
     @PostMapping("/reservation/save")
-    public ResponseEntity<Reservation> saveReservation(@RequestBody ReservationDTO.ReservationReq request, HttpServletRequest header) {
+    public ResponseEntity<Reservation> saveReservation(HttpServletRequest header, @RequestBody ReservationDTO.ReservationReq request ) {
         Member member = memberService.tokenToMember(header);
         Reservation reservation = memberService.reservation(member, request.getTimes(), request.getResDate());
         return ResponseEntity.status(HttpStatus.CREATED).body(reservation);
