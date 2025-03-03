@@ -1,6 +1,6 @@
 package drumstory.drumstory.repository;
 
-import drumstory.drumstory.domain.AvailableTime;
+import drumstory.drumstory.domain.TImeTable;
 import drumstory.drumstory.domain.Reservation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,8 @@ import java.util.List;
 public class ReservationRepository implements ReservationInterface{
     private final EntityManager em;
     @Override
-    public List<AvailableTime> getAvailableTimes() {
-        return em.createQuery("Select a from AvailableTime a", AvailableTime.class).getResultList();
+    public List<TImeTable> getTimeTable() {
+        return em.createQuery("Select t from time_table t", TImeTable.class).getResultList();
     }
 
     @Override

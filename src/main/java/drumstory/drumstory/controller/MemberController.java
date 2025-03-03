@@ -22,7 +22,6 @@ import java.util.List;
 @Tag(name = "회원 페이지")
 public class MemberController {
     private final MemberService memberService;
-    private final TimeTable availableTime;
 
     @Operation(summary = "로그인 기능 (주희)", description = "관리자는 토큰 필요",
             responses = {@ApiResponse(responseCode = "200", description = "로그인 성공"),

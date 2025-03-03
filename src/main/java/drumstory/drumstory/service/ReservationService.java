@@ -3,6 +3,7 @@ package drumstory.drumstory.service;
 import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
+import drumstory.drumstory.domain.TImeTable;
 import drumstory.drumstory.exception.ReservateException;
 import drumstory.drumstory.repository.ReservationInterface;
 import lombok.RequiredArgsConstructor;
@@ -82,14 +83,17 @@ public class ReservationService {
         return String.format("%s %02d:%02d", period, hour12, minute);
     }
 
-
-    private String convertTo24HourTime(String time) {
-        // 오전/오후 구분
-        boolean isPM = time.contains("오후");
-        boolean isAM = time.contains("오전");
-
+    private String separateAMPM(String time){
         // 오전/오후를 제거한 시간만 남긴다.
         time = time.replace("오전", "").replace("오후", "").trim();
+        return time;
+    }
+
+    private String convertTo24HourTime(String time) {
+        time = separateAMPM(time);
+
+        boolean isPM = time.contains("오후");
+        boolean isAM = time.contains("오전");
 
         // 시간 문자열을 12시간제에서 24시간제로 변환
         String[] timeParts = time.split(":");
@@ -108,29 +112,42 @@ public class ReservationService {
         return String.format("%02d:%02d", hour, minute);
     }
 
+
     public Reservation saveReservationTimeRoom(Member member, List<String> times, String date, int roomNum) {
         LocalDate resDate = LocalDate.parse(date);
         String time1;
         String time2;
-        if (times.size() == 2) {
-            // 오전/오후를 분리하여 처리
-            time1 = times.get(0).trim(); // 앞뒤 공백 제거, 12시간제를 24시간제로 변환
-            time2 = times.get(1).trim();     // 앞뒤 공백 제거, 12시간제를 24시간제로 변환
+        if (times.size() == 1) {
+            time1 = separateAMPM(times.getFirst());
+            time2 = null;
         }
-        else {
-            time1 = times.getFirst().trim();
-            time2 = time1;
+        else{
+            time1 = separateAMPM(times.get(0));
+            time2 = separateAMPM(times.get(1));
         }
-        String time1_24 = convertTo24HourTime(time1);
-        String time2_24 = convertTo24HourTime(time2);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime Time1 = LocalTime.parse(time1_24, formatter);
-        LocalTime Time2 = LocalTime.parse(time2_24, formatter);
+
+
 
 //        Reservation reservation = new Reservation(resDate, )
 //        reservationInterface.saveReservation()
 
         return null;
+    }
+
+    public List<TimeTable> getAvailableTimes(){
+        LocalTime now = LocalTime.now();
+        List<TImeTable> availableTimes = reservationInterface.getTimeTable();
+        List<Reservation> reservations = reservationInterface.getAllReservations();
+        System.out.println(now);
+
+        System.out.println("Available Times:");
+        availableTimes.forEach(time -> System.out.println("id: " + time.getId() + ", times: " + time.getTimeTable()));
+
+        System.out.println("Reservations:");
+        reservations.forEach(res -> System.out.println("id: " + res.getId() + ", user: " + res.getTime1() + ", EndTime: " + res.getTime2()));
+
+        return null;
+
     }
 }

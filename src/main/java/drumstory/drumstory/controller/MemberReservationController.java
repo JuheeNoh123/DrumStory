@@ -25,12 +25,12 @@ import java.util.List;
 public class MemberReservationController {
     private final MemberService memberService;
     private final ReservationService reservationService;
-    private final TimeTable availableTime;
+    private final TimeTable timeTable;
 
     @GetMapping("/schedule")
     public List<ReservationDTO.ScheduleRes> getSchedule(HttpServletRequest header) {
 
-        availableTime.getAvailableTimes();
+        reservationService.getAvailableTimes();
         return null;
     }
 
