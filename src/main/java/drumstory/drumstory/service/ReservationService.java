@@ -133,4 +133,9 @@ public class ReservationService {
     }
 
 
+
+
+    public List<Reservation> findAll() {
+        return reservationInterface.findAll();
+    }
 }

@@ -17,4 +17,6 @@ public interface ReservationInterface {
     Reservation saveReservation(Reservation reservation);
 
     TimeTable getTimeTableByTime(String reservationTime);
+
+    List<Reservation> findAll();
 }
