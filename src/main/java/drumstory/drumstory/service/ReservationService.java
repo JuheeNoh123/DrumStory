@@ -115,8 +115,12 @@ public class ReservationService {
 
     public Reservation saveReservationTimeRoom(Member member, List<String> times, String date, int roomNum) {
         LocalDate resDate = LocalDate.parse(date);
-        String time1;
-        String time2;
+        for (String time : times) {
+            // time을 사용하여 원하는 로직을 처리
+            String seperateTime = separateAMPM(time);
+            TimeTable timeTable = reservationInterface.getTimeTableByTime(seperateTime);
+            // 예약 저장 로직 추가
+        }
 
 
 

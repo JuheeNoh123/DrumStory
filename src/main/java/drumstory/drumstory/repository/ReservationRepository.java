@@ -30,6 +30,8 @@ public class ReservationRepository implements ReservationInterface{
 
     @Override
     public TimeTable getTimeTableByTime(String reservationTime) {
-        return null;
+        return em.createQuery("select t from time_table t where t.timeTable = :reservationTime", TimeTable.class)
+                .setParameter("reservationTime", reservationTime)
+                .getSingleResult();
     }
 }
