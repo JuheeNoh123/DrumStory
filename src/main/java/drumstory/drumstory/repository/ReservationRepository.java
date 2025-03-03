@@ -1,22 +1,19 @@
 package drumstory.drumstory.repository;
 
 import drumstory.drumstory.domain.TimeTable;
-import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class ReservationRepository implements ReservationInterface{
     private final EntityManager em;
-    @Override
-    public List<TimeTable> getTimeTable() {
-        return em.createQuery("Select t from time_table t", TimeTable.class).getResultList();
-    }
+
 
     @Override
     public List<Reservation> getAllReservations() {
@@ -24,9 +21,8 @@ public class ReservationRepository implements ReservationInterface{
     }
 
     @Override
-    public Reservation saveReservation(Reservation reservation) {
+    public void saveReservation(Reservation reservation) {
         em.persist(reservation);
-        return reservation;
     }
 
     @Override
@@ -39,6 +35,19 @@ public class ReservationRepository implements ReservationInterface{
     @Override
     public List<Reservation> findAll() {
         return em.createQuery("SELECT m FROM Reservation m", Reservation.class)
+                .getResultList();
+    }
+
+    @Override
+    public List<Reservation> findByResDate(LocalDate resDate) {
+        return em.createQuery("select r from Reservation r Where r.resDate = :resDate", Reservation.class)
+                .setParameter("resDate",resDate)
+                .getResultList();
+    }
+
+    @Override
+    public List<TimeTable> getAllTimeTables() {
+        return em.createQuery("SELECT t FROM time_table t", TimeTable.class)
                 .getResultList();
     }
 

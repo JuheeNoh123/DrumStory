@@ -13,12 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -162,4 +165,37 @@ public class ReservationService {
     public List<Reservation> findAll() {
         return reservationInterface.findAll();
     }
+
+    public List<TimeTable> findAvailableTimes(LocalDate resDate) {
+        LocalTime currentTime = LocalTime.now();
+
+        List<Reservation> reservations = reservationInterface.findByResDate(resDate);
+
+        //reservation리스트에서 예약한 시간만 뽑아서 리스트로 수정
+        List<TimeTable> reservedTimes = reservations.stream()
+                .map(Reservation::getTime)
+                .collect(Collectors.toList());
+
+        List<TimeTable> allTimeTables = reservationInterface.getAllTimeTables();
+
+        // 현재 시간을 30분 단위로 반올림 (예: 16:20 -> 16:00, 16:30 -> 16:30)
+        LocalTime roundedCurrentTime = currentTime.withSecond(0).withNano(0).withMinute(currentTime.getMinute() / 30 * 30);
+
+        // allTimeTables 리스트를 스트림으로 변환
+        return allTimeTables.stream()
+                // 시간표에서 예약 가능한 시간만 필터링
+                .filter(timeTable -> {
+                    // 각 TimeTable 객체에서 시간을 문자열로 가져와 LocalTime 객체로 변환
+                    LocalTime time = LocalTime.parse(timeTable.getTimeTable());
+
+                    // 현재 시간 이후이거나 현재 시간이랑 같은 시간 (정각)에 예약 가능 시간 포함
+                    return time.isAfter(roundedCurrentTime) || time.equals(roundedCurrentTime);
+                })
+                // 이미 예약된 시간 목록에 포함되지 않은 시간만 필터링
+                .filter(time -> !reservedTimes.contains(time))
+                // 예약 가능한 시간들을 리스트로 수집하여 반환
+                .collect(Collectors.toList());
+
+    }
+
 }
