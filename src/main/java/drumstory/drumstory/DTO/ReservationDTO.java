@@ -35,5 +35,8 @@ public class ReservationDTO {
         private String endTime;
         @Schema(description = "예약날짜", example = "YYYY-MM-DD")
         private LocalDate resDate;
+        @Schema(description = "예약요일", example = "Monday")
+        private String resDay;
+
     }
 }

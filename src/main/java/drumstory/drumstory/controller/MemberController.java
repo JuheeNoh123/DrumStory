@@ -39,14 +39,16 @@ public class MemberController {
         return null;
     }
 
-    @Operation(summary = "시간 예약 기능 (주희)", description = "해더에 토큰 필요",
-            responses = {@ApiResponse(responseCode = "201", description = "예약 성공"),
-                    @ApiResponse(responseCode = "400", description = "1시간 초과로 시간 선택"),
-                    @ApiResponse(responseCode = "400", description = "1시간 초과로 시간 선택"),})
+    @Operation(summary = "시간 예약 (주희)", description = "해더에 토큰 필요",
+            responses = {@ApiResponse(responseCode = "200", description = "시간 선택 완료"),
+                    @ApiResponse(responseCode = "400", description = "최대 두 개의 시간만 선택 가능"),
+                    @ApiResponse(responseCode = "400", description = "예약 시간을 선택해주세요(빈 리스트 일 경우)"),
+                    @ApiResponse(responseCode = "400", description = "연속된 시간으로만 선택 가능합니다")
+            })
     @PostMapping("/reservation/save")
     public ResponseEntity<ReservationDTO.ReservateTimeRes> saveReservation(HttpServletRequest header, @RequestBody ReservationDTO.ReservateTimeReq request ) {
         Member member = memberService.tokenToMember(header);
         ReservationDTO.ReservateTimeRes reservateTimeres = memberService.reservateTime(member, request.getTimes(), request.getResDate());
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservateTimeres);
+        return ResponseEntity.status(HttpStatus.OK).body(reservateTimeres);
     }
 }
