@@ -8,6 +8,7 @@ import drumstory.drumstory.domain.TimeTable;
 import drumstory.drumstory.exception.ReservateException;
 import drumstory.drumstory.repository.ReservationInterface;
 import drumstory.drumstory.repository.RoomInterface;
+import drumstory.drumstory.repository.TimeTableInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class ReservationService {
     private final ReservationInterface reservationInterface;
     private final RoomInterface roomInterface;
+    private final TimeTableInterface timeTableInterface;
 
 
     public ReservationDTO.ReservationTimeRes selectTime(Member member, List<String> times, String date){
@@ -170,31 +172,77 @@ public class ReservationService {
         LocalTime currentTime = LocalTime.now();
 
         List<Reservation> reservations = reservationInterface.findByResDate(resDate);
+        System.out.println(reservations);
 
-        //reservation리스트에서 예약한 시간만 뽑아서 리스트로 수정
-        List<TimeTable> reservedTimes = reservations.stream()
-                .map(Reservation::getTime)
-                .collect(Collectors.toList());
 
-        List<TimeTable> allTimeTables = reservationInterface.getAllTimeTables();
+        List<TimeTable> allTimeTables = timeTableInterface.getAllTimeTables();
 
         // 현재 시간을 30분 단위로 반올림 (예: 16:20 -> 16:00, 16:30 -> 16:30)
         LocalTime roundedCurrentTime = currentTime.withSecond(0).withNano(0).withMinute(currentTime.getMinute() / 30 * 30);
 
-        // allTimeTables 리스트를 스트림으로 변환
-        return allTimeTables.stream()
-                // 시간표에서 예약 가능한 시간만 필터링
+        // 예약 가능한 시간만 필터링하는 스트림
+        List<TimeTable> availableTimeTables = allTimeTables.stream()
                 .filter(timeTable -> {
-                    // 각 TimeTable 객체에서 시간을 문자열로 가져와 LocalTime 객체로 변환
                     LocalTime time = LocalTime.parse(timeTable.getTimeTable());
-
-                    // 현재 시간 이후이거나 현재 시간이랑 같은 시간 (정각)에 예약 가능 시간 포함
                     return time.isAfter(roundedCurrentTime) || time.equals(roundedCurrentTime);
                 })
-                // 이미 예약된 시간 목록에 포함되지 않은 시간만 필터링
-                .filter(time -> !reservedTimes.contains(time))
-                // 예약 가능한 시간들을 리스트로 수집하여 반환
+                .toList();
+
+        // 연습실별로 예약된 시간이 없으면 그 시간은 예약 가능
+        // 연습실이 모두 예약되어 있는 시간을 제외
+        List<TimeTable> finalAvailableTimes = new ArrayList<>();
+        for (TimeTable timeTable : availableTimeTables) {
+            // 해당 시간대에 예약된 방들을 찾음
+            List<Room> bookedRooms = reservations.stream()
+                    .filter(reservation ->{
+                                LocalTime reservationTime = LocalTime.parse(reservation.getTime().getTimeTable()); // 또는 LocalTime으로 변경
+                                LocalTime timeTableTime = LocalTime.parse(timeTable.getTimeTable());
+                                return reservationTime.equals(timeTableTime);
+                            })  // 해당 시간대의 예약 찾기
+                    .map(Reservation::getRoom)  // 예약된 방만 추출
+                    .toList();
+
+            System.out.println(timeTable.getTimeTable()); // 현재 시간대 출력
+            System.out.println(bookedRooms.size()); // 예약된 방 개수 출력
+
+
+            // 예약된 방이 5개 미만이면 해당 시간은 예약 가능한 시간으로 간주
+            // 만약 예약된 방이 5개 미만이면 해당 시간을 예약 가능 시간으로 추가
+            if (bookedRooms.size() < 5) {
+                finalAvailableTimes.add(timeTable);
+            }
+        }
+
+        return finalAvailableTimes;
+
+    }
+
+    public List<Room> findAvailableRooms(LocalDate resDate, List<Long> reservedTimes) {
+        List<TimeTable> timeTables = timeTableInterface.findAllByIds(reservedTimes);
+        System.out.println("Reserved Times: " + timeTables);
+
+
+        List<Reservation> reservedReservations = reservationInterface.findReservationsByDateAndTimes(resDate, timeTables);
+        for (Reservation reservation : reservedReservations) {
+            System.out.println(reservation.getId());
+        }
+        // 예약된 방들의 리스트에서 예약된 방들을 제외한 방들을 찾기
+        List<Long> reservedRoomIds = reservedReservations.stream()
+                .map(reservation -> reservation.getRoom().getId())
                 .collect(Collectors.toList());
+
+        System.out.println("Reserved Room IDs: " + reservedRoomIds);
+
+        // 예약되지 않은 방들 필터링
+        List<Room> allRooms = roomInterface.findAll();
+
+        List<Room> availableRooms = allRooms.stream()
+                .filter(room -> !reservedRoomIds.contains(room.getId())) // 예약된 방 제외
+                .collect(Collectors.toList());
+
+        System.out.println("Available Rooms: " + availableRooms);  // 최종 예약되지 않은 방 출력
+
+        return availableRooms;
 
     }
 

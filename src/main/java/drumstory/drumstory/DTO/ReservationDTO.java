@@ -1,5 +1,6 @@
 package drumstory.drumstory.DTO;
 
+import drumstory.drumstory.domain.Room;
 import drumstory.drumstory.domain.TimeTable;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -42,7 +43,7 @@ public class ReservationDTO {
         private List<String> times;
         @Schema(description = "예약날짜", example = "YYYY-MM-DD")
         private String resDate;
-        @Schema(description = "예약한 방", example = "1")
+        @Schema(description = "예약한 방", example = "1번 방")
         private String roomNum;
     }
 
@@ -62,22 +63,42 @@ public class ReservationDTO {
         private LocalDate resDate;
         @Schema(description = "예약요일", example = "Monday")
         private String resDay;
-        @Schema(description = "예약한 방", example = "1")
+        @Schema(description = "예약한 방", example = "1번 방")
         private String roomNum;
     }
 
     @Data
     public static class DateReq{
         @Schema(description = "예약날짜", example = "YYYY-MM-DD")
-        LocalDate date;
+        LocalDate resDate;
     }
+
+
 
     @Data
     @AllArgsConstructor
     public static class AvailableTimesAndMember{
         @Schema(description = "예약자", example = "노주희")
         String name;
-        @Schema(description = "가능한 시간", example = "HH:mm (24시간제)")
+        @Schema(description = "가능한 시간", example = "[{ \"timeTable\": \"02:00\",\"id\": 5 },..]")
         List<TimeTable> availableTimes;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class AvailableRoomsRes{
+        @Schema(description = "예약자", example = "노주희")
+        String name;
+        @Schema(description = "가능한 연습실", example = "{Id:1, roomNum:\"1번 방\"}")
+        List<Room> availableRooms;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class AvailableRoomsReq{
+        @Schema(description = "예약날짜", example = "YYYY-MM-DD")
+        private LocalDate resDate;
+        @Schema(description = "예약 시간 ID", example = "{1,2}")
+        List<Long> reservationTimes;
     }
 }
