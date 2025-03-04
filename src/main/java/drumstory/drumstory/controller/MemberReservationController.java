@@ -32,7 +32,7 @@ public class MemberReservationController {
     @PostMapping("/reservation/time")
     public ResponseEntity<ReservationDTO.ReservationTimeRes> ReservationTime(HttpServletRequest header, @RequestBody ReservationDTO.ReservationTimeReq request ) {
         Member member = memberService.tokenToMember(header);
-        ReservationDTO.ReservationTimeRes reservationTimeRes = reservationService.selectTime(member, request.getTimes(), request.getResDate());
+        ReservationDTO.ReservationTimeRes reservationTimeRes = reservationService.selectTime(member, request.getResTimeIds(), request.getResDate());
         return ResponseEntity.status(HttpStatus.OK).body(reservationTimeRes);
     }
 
@@ -41,7 +41,7 @@ public class MemberReservationController {
     @PostMapping("/reservation/room/selected")
     public  ResponseEntity<ReservationDTO.ReservationTimeRoomRes> saveReservation(HttpServletRequest header, @RequestBody ReservationDTO.ReservationTimeRoomReq request) {
         Member member = memberService.tokenToMember(header);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.saveReservationTimeRoom(member,request.getTimes(),request.getResDate(),request.getRoomNum()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.saveReservationTimeRoom(member,request.getResTimeIds(),request.getResDate(),request.getRoomId()));
 
     }
 
@@ -58,6 +58,6 @@ public class MemberReservationController {
     @PostMapping("/reservation/room")
     public ResponseEntity<ReservationDTO.AvailableRoomsRes> AvailableRooms(HttpServletRequest header, @RequestBody ReservationDTO.AvailableRoomsReq req) {
         Member member = memberService.tokenToMember(header);
-        return ResponseEntity.status(HttpStatus.OK).body(new ReservationDTO.AvailableRoomsRes(member.getName(), reservationService.findAvailableRooms(req.getResDate(),req.getReservationTimes())));
+        return ResponseEntity.status(HttpStatus.OK).body(new ReservationDTO.AvailableRoomsRes(member.getName(), reservationService.findAvailableRooms(req.getResDate(),req.getResTimeIds())));
     }
 }

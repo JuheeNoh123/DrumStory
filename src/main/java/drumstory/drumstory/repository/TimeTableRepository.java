@@ -1,12 +1,10 @@
 package drumstory.drumstory.repository;
 
-import drumstory.drumstory.domain.Reservation;
 import drumstory.drumstory.domain.TimeTable;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +14,9 @@ public class TimeTableRepository implements TimeTableInterface{
     private final EntityManager em;
 
     @Override
-    public List<TimeTable> findAllByIds(List<Long> ids) {
+    public List<TimeTable> findAllByIds(List<Integer> ids) {
         List<TimeTable> timeTables = new ArrayList<>();
-        for (Long id : ids) {
+        for (Integer id : ids) {
             TimeTable timeTable = em.createQuery("SELECT t FROM time_table t WHERE t.id = :id", TimeTable.class)
                     .setParameter("id", id)
                     .getSingleResult();
@@ -33,6 +31,11 @@ public class TimeTableRepository implements TimeTableInterface{
     public List<TimeTable> getAllTimeTables() {
         return em.createQuery("SELECT t FROM time_table t", TimeTable.class)
                 .getResultList();
+    }
+
+    @Override
+    public TimeTable findById(Integer id){
+        return em.find(TimeTable.class, id);
     }
 
 

@@ -13,10 +13,8 @@ public class RoomRepository implements RoomInterface {
     private final EntityManager em;
 
     @Override
-    public Room findByRoomNum(String roomNum) {
-        return em.createQuery("select r from Room r where r.roomNum = :roomNum",Room.class)
-                .setParameter("roomNum",roomNum)
-                .getSingleResult();
+    public Room findById(Long roomId) {
+        return em.find(Room.class, roomId);
     }
 
     // 모든 방을 데이터베이스에서 조회하는 메서드

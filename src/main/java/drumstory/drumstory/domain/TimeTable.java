@@ -14,7 +14,7 @@ import java.util.Objects;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TimeTable {
     @Id
-    private Long id;
+    private Integer id;
     private String timeTable; // 예시로 시간만 문자열로 저장한 경우
 
     // equals와 hashCode 구현

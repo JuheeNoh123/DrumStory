@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,22 +31,30 @@ public class ReservationService {
     private final TimeTableInterface timeTableInterface;
 
 
-    public ReservationDTO.ReservationTimeRes selectTime(Member member, List<String> times, String date){
+    public ReservationDTO.ReservationTimeRes selectTime(Member member, List<Integer> resTimeIds, String date){
         LocalDate resDate = LocalDate.parse(date);
-        if (times.size() > 2) {
+        if (resTimeIds.size() > 2) {
             throw new ReservateException("최대 두 개의 시간만 선택할 수 있습니다.", HttpStatus.BAD_REQUEST);
         }
-        if (times.isEmpty()) {
+        if (resTimeIds.isEmpty()) {
             throw new ReservateException("예약 시간을 선택해주세요",HttpStatus.BAD_REQUEST);
         }
-        List<String> StartEndTimes = startEndTime(times);
+
+        List<TimeTable> timeTablesList = new ArrayList<>();
+        List<String> timeNameList = new ArrayList<>();  //18:30,19:00
+        for (Integer timeId : resTimeIds) {
+            TimeTable timeTable = timeTableInterface.findById(timeId);
+            timeNameList.add(timeTable.getTimeTable());
+            timeTablesList.add(timeTable);
+        }
+        List<String> StartEndTimes = startEndTime(timeNameList);
 
         String day = resDate.getDayOfWeek().toString();
-        return new ReservationDTO.ReservationTimeRes(member.getName(),times,StartEndTimes.get(0), StartEndTimes.get(1),resDate,day);
+        return new ReservationDTO.ReservationTimeRes(member.getName(),timeTablesList,StartEndTimes.get(0), StartEndTimes.get(1),resDate,day);
 
     }
 
-    //오전 오후 다시 붙이기
+    //오전 오후 다시 붙이기 + 24시간제를 12시간제로
     private String formatToAmPm(LocalTime time) {
         int hour = time.getHour();
         int minute = time.getMinute();
@@ -56,75 +63,41 @@ public class ReservationService {
 
         // 24시간제를 12시간제로 변환
         int hour12;
-        if (hour == 0) {
-            // 24시간제에서 0시는 12시(자정)로 변환
-            hour12 = 12;
-        } else if (hour > 12) {
+        if (hour > 12) {
             // 오후 시간 (13~23시)는 12를 빼서 12시간제로 변환
             hour12 = hour - 12;
         } else {
-            // 나머지는 그대로 사용 (1~12시)
+            // 나머지는 그대로 사용 (0~12시)
             hour12 = hour;
         }
 
         return String.format("%s %02d:%02d", period, hour12, minute);
     }
 
-    //오전 오후 뜯어내기
-    private String separateAMPM(String time){
-        // 오전/오후를 제거한 시간만 남긴다.
-        time = time.replace("오전", "").replace("오후", "").trim();
-        return time;
-    }
-
-    //24시로 시간 변환
-    private String convertTo24HourTime(String time) {
-        time = separateAMPM(time);
-
-        boolean isPM = time.contains("오후");
-        boolean isAM = time.contains("오전");
-
-        // 시간 문자열을 12시간제에서 24시간제로 변환
-        String[] timeParts = time.split(":");
-        int hour = Integer.parseInt(timeParts[0]);
-        int minute = Integer.parseInt(timeParts[1]);
-
-        // 오후인 경우 12를 더해준다. (12시간제 -> 24시간제)
-        if (isPM && hour < 12) {
-            hour += 12;
-        } else if (isAM && hour == 12) {
-            // 오전 12시 -> 자정으로 처리
-            hour = 0;
-        }
-
-        // 24시간제로 변환된 시간을 다시 "HH:mm" 형식으로 반환
-        return String.format("%02d:%02d", hour, minute);
-    }
 
     //방정보 받아서 예약 진행
     @Transactional
-    public ReservationDTO.ReservationTimeRoomRes saveReservationTimeRoom(Member member, List<String> times, String date, String roomNum) {
+    public ReservationDTO.ReservationTimeRoomRes saveReservationTimeRoom(Member member, List<Integer> resTimeIds, String date, Long roomId) {
         LocalDate resDate = LocalDate.parse(date);
         String day = resDate.getDayOfWeek().toString();
-        Room room = roomInterface.findByRoomNum(roomNum);
+        Room room = roomInterface.findById(roomId);
 
-
+        List<String> timetableString = new ArrayList<>();
 
         //예약
-        for (String time : times) {
-            // time을 사용하여 원하는 로직을 처리
-            String separateTime = separateAMPM(time);
-            TimeTable timeTable = reservationInterface.getTimeTableByTime(separateTime);
+        for (int timeId : resTimeIds) {
+            TimeTable timeTable = timeTableInterface.findById(timeId);
+            timetableString.add(timeTable.getTimeTable());
             Reservation reservation = new Reservation(resDate, timeTable,member,room);
 
             reservationInterface.saveReservation(reservation);
 
         }
 
-        List<String> StartEndTimes = startEndTime(times);
+        List<String> StartEndTimes = startEndTime(timetableString); //시작 시간, 끝 시간 구하기
 
 
-        return new ReservationDTO.ReservationTimeRoomRes(member.getName(), StartEndTimes.get(0), StartEndTimes.get(1), resDate, day, roomNum);
+        return new ReservationDTO.ReservationTimeRoomRes(member.getName(), StartEndTimes.get(0), StartEndTimes.get(1), resDate, day, room.getRoomNum());
     }
 
     //시작 시간, 끝시간 계산
@@ -140,12 +113,10 @@ public class ReservationService {
             time1 = times.getFirst().trim();
             time2 = time1;
         }
-        String time1_24 = convertTo24HourTime(time1);
-        String time2_24 = convertTo24HourTime(time2);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime Time1 = LocalTime.parse(time1_24, formatter);
-        LocalTime Time2 = LocalTime.parse(time2_24, formatter);
+        LocalTime Time1 = LocalTime.parse(time1, formatter);
+        LocalTime Time2 = LocalTime.parse(time2, formatter);
 
         // 첫타임,두번째 타임 차이가 30이 아닐때 (연속안됐을떄)
         if (Duration.between(Time1, Time2).toMinutes() > 30) {
@@ -155,11 +126,13 @@ public class ReservationService {
 
         // 예약 끝 시간 계산 (30분 추가)
         LocalTime endTimeObj = Time2.plusMinutes(30);
+
+        System.out.println(endTimeObj);
         String endTime = formatToAmPm(endTimeObj);
-        List<String> StartEndTimes = new ArrayList<>();
-        StartEndTimes.add(time1);
-        StartEndTimes.add(endTime);
-        return StartEndTimes;
+        String startTime = formatToAmPm(Time1);
+        System.out.println(endTime);
+
+        return List.of(new String[]{startTime, endTime});
     }
 
 
@@ -217,7 +190,7 @@ public class ReservationService {
 
     }
 
-    public List<Room> findAvailableRooms(LocalDate resDate, List<Long> reservedTimes) {
+    public List<Room> findAvailableRooms(LocalDate resDate, List<Integer> reservedTimes) {
         List<TimeTable> timeTables = timeTableInterface.findAllByIds(reservedTimes);
         System.out.println("Reserved Times: " + timeTables);
 

@@ -13,8 +13,8 @@ public class ReservationDTO {
 
     @Data
     public static class ReservationTimeReq {
-        @Schema(description = "예약 시간 리스트", example = "[ \"오전 HH:MM\",\"오후 HH:MM\"]")
-        private List<String> times;
+        @Schema(description = "예약 시간 리스트", example = "[37,38]")
+        private List<Integer> resTimeIds;
         @Schema(description = "예약날짜", example = "YYYY-MM-DD")
         private String resDate;
     }
@@ -24,8 +24,8 @@ public class ReservationDTO {
     public static class ReservationTimeRes {
         @Schema(description = "예약자명", example = "노주희")
         private String name;
-        @Schema(description = "선택한 예약 시간 리스트", example = "오전 HH:MM")
-        private List<String> selectTimes;
+        @Schema(description = "선택한 예약 시간 리스트", example = "[{id:37,timetable:\"오후 06:30\"},{id:38,timetable:\"오후 07:00\"}]")
+        private List<TimeTable> selectTimes;
         @Schema(description = "예약 시작 시간", example = "오전 HH:MM")
         private String startTime;
         @Schema(description = "예약 끝 시간", example = "오전 HH:MM")
@@ -39,12 +39,12 @@ public class ReservationDTO {
 
     @Data
     public static class ReservationTimeRoomReq {
-        @Schema(description = "예약 시간 리스트", example = "[ \"오전 HH:MM\",\"오후 HH:MM\"]")
-        private List<String> times;
+        @Schema(description = "예약 시간 리스트", example = "[37,38]")
+        private List<Integer> resTimeIds;
         @Schema(description = "예약날짜", example = "YYYY-MM-DD")
         private String resDate;
-        @Schema(description = "예약한 방", example = "1번 방")
-        private String roomNum;
+        @Schema(description = "예약한 방", example = "1")
+        private Long roomId;
     }
 
 
@@ -53,8 +53,6 @@ public class ReservationDTO {
     public static class ReservationTimeRoomRes {
         @Schema(description = "예약자명", example = "노주희")
         private String name;
-//        @Schema(description = "선택한 예약 시간 리스트", example = "오전 HH:MM")
-//        private List<String> selectTimes;
         @Schema(description = "예약 시작 시간", example = "오전 HH:MM")
         private String startTime;
         @Schema(description = "예약 끝 시간", example = "오전 HH:MM")
@@ -99,6 +97,6 @@ public class ReservationDTO {
         @Schema(description = "예약날짜", example = "YYYY-MM-DD")
         private LocalDate resDate;
         @Schema(description = "예약 시간 ID", example = "{1,2}")
-        List<Long> reservationTimes;
+        List<Integer> resTimeIds;
     }
 }

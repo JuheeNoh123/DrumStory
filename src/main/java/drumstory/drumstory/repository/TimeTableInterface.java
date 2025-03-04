@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface TimeTableInterface {
 
-    List<TimeTable> findAllByIds(List<Long> ids);
+    List<TimeTable> findAllByIds(List<Integer> ids);
 
     List<TimeTable> getAllTimeTables();
 
 
+    TimeTable findById(Integer id);
 }
