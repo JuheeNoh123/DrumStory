@@ -44,8 +44,7 @@
 
 ### ✔️디자인 기획
 [<img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">](https://www.figma.com/your-figma-link)  
-디자인 보러 가기 👉 [Figma 링크]([https://www.figma.com/design/oWFyMhrxptTOvngFMnDeP9/%EB%93%9C%EB%9F%BC%EC%8A%A4%ED%86%A0%EB%A6%AC?node-id=20-26&p=f&t=sp2l2h5bArvuN271-0])
-
+디자인 보러 가기 👉 [Figma 링크](https://www.figma.com/design/oWFyMhrxptTOvngFMnDeP9/%EB%93%9C%EB%9F%BC%EC%8A%A4%ED%86%A0%EB%A6%AC?node-id=20-26&p=f&t=sp2l2h5bArvuN271-0)
 
 
 ---
