@@ -43,7 +43,9 @@
 <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">  
 
 ### ✔️디자인 기획
-<img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
+[<img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">](https://www.figma.com/your-figma-link)  
+디자인 보러 가기 👉 [Figma 링크](https://www.figma.com/your-figma-link)
+
 
 
 ---
