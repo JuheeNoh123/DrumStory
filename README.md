@@ -41,7 +41,7 @@
 (추가 예정)
  ## API 문서화
  <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
- ## 디자인/기획
+ ## 디자인 기획
  <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
 
 ---
