@@ -35,10 +35,14 @@
 
 ## 🛠 기술 스택
 
-- **Backend**:  <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">, <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-- **Frontend**: (추가 예정)
-- **API 문서화**: Swagger
-- **디자인 기획**: Figma
+ ## ✔️Backend
+ <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+ ## ✔️Frontend
+(추가 예정)
+ ## API 문서화
+ Swagger
+ ## 디자인/기획
+Figma
 
 ---
 
