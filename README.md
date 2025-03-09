@@ -35,7 +35,7 @@
 
 ## 🛠 기술 스택
 
-- **Backend**:  <img src="https://img.shields.io/badge/Spring Boot-3178C6?style=flat&logo=#6DB33F&logoColor=white"/>, MySQL
+- **Backend**:  <img src="https://img.shields.io/badge/SpringBoot-3178C6?style=flat&logo=#6DB33F&logoColor=white"/>, MySQL
 - **Frontend**: (추가 예정)
 - **API 문서화**: Swagger
 - **디자인 기획**: Figma
