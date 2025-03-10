@@ -16,7 +16,6 @@ public interface ReservationInterface {
     TimeTable getTimeTableByTime(String reservationTime);
 
     List<Reservation> findAll(LocalDate resDate);
-    List<Reservation> findAll();
 
 
     List<Reservation> findByResDate(LocalDate resDate);
