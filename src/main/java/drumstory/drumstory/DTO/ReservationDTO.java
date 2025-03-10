@@ -10,6 +10,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ReservationDTO {
+    @Data
+    public static class ScheduleRes {
+        @Schema(description = "예약 가능한 시간", example = "11:30")
+        private String ava_time;
+    }
 
     @Data
     public static class ReservationTimeReq {

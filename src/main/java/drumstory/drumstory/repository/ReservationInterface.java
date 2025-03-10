@@ -14,10 +14,6 @@ public interface ReservationInterface {
 
     void saveReservation(Reservation reservation);
 
-    TimeTable getTimeTableByTime(String reservationTime);
-
-    List<Reservation> findAll(LocalDate resDate);
-
 
     List<Reservation> findByResDate(LocalDate resDate);
 
@@ -28,4 +24,8 @@ public interface ReservationInterface {
     List<Member> findMembersByTime(TimeTable time);
 
     boolean checkNextReservation(TimeTable time, Member member);
+
+    TimeTable getTimeTableByTime(String reservationTime);
+
+    List<Reservation> findAll(LocalDate resDate);
 }

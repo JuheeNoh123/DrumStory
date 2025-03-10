@@ -5,7 +5,6 @@ import drumstory.drumstory.domain.TimeTable;
 import drumstory.drumstory.domain.Reservation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
