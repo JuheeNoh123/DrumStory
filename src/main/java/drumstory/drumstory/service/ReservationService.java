@@ -11,15 +11,18 @@ import drumstory.drumstory.repository.RoomInterface;
 import drumstory.drumstory.repository.TimeTableInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -223,6 +226,26 @@ public class ReservationService {
         System.out.println("Available Rooms: " + availableRooms);  // 최종 예약되지 않은 방 출력
 
         return availableRooms;
+
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0/30 * * * *") // 매 시간 0분, 30분마다 실행
+    public void cleanUpExpiredReservations() {
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+
+        // 원하는 포맷 지정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        // LocalTime을 String으로 변환
+        String formattedTime = currentTime.format(formatter);
+
+        // 현재 시간에 해당하는 time_table 찾기
+        TimeTable currentTimeTable = timeTableInterface.findByTime(formattedTime);
+
+        int timeTableId = currentTimeTable.getId();
+        reservationInterface.deletePastReservations(currentDate, timeTableId);
 
     }
 

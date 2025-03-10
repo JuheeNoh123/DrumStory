@@ -28,4 +28,6 @@ public interface ReservationInterface {
     TimeTable getTimeTableByTime(String reservationTime);
 
     List<Reservation> findAll(LocalDate resDate);
+
+    void deletePastReservations(LocalDate currentDate, int timeTableId);
 }

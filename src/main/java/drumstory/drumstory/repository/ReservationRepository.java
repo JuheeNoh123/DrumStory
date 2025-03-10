@@ -40,6 +40,7 @@ public class ReservationRepository implements ReservationInterface{
                 .getResultList();
     }
 
+
     @Override
     public List<Reservation> findByResDate(LocalDate resDate) {
         System.out.println("Looking for reservations on date: " + resDate);
@@ -95,6 +96,15 @@ public class ReservationRepository implements ReservationInterface{
                 .getResultList();  // 결과가 없으면 빈 리스트 반환
 
         return !result.isEmpty();  // 리스트가 비어있지 않으면 true 반환
+    }
+
+    @Override
+    public void deletePastReservations(LocalDate currentDate, int timeTableId) {
+        em.createQuery("DELETE FROM Reservation r WHERE r.resDate < :currentDate OR (r.resDate = :currentDate AND r.time.id < :timeTableId)")
+                .setParameter("currentDate", currentDate)
+                .setParameter("timeTableId", timeTableId)
+                .executeUpdate();
+
     }
 
 
