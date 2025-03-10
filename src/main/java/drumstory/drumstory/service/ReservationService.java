@@ -152,6 +152,10 @@ public class ReservationService {
     }
 
     public List<TimeTable> findAvailableTimes(LocalDate resDate) {
+        LocalDate currentDate = LocalDate.now();
+        if (resDate.isAfter(currentDate)) {
+            return timeTableInterface.getAllTimeTables();
+        }
         LocalTime currentTime = LocalTime.now();
 
         List<Reservation> reservations = reservationInterface.findByResDate(resDate);
