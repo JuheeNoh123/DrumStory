@@ -1,0 +1,25 @@
+name: Mirror Repository
+
+on:
+  schedule:
+    - cron: '*/1 * * * *'  # 1분마다 실행
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: sunwoo1256/DrumStory
+          token: ${{ secrets.GIT_PAT }}
+
+      - name: Clone the source repository (bare)
+        run: git clone --bare https://github.com/JuheeNoh123/DrumStory.git source.git
+
+      - name: Push all branches and tags to the target repository
+        run: |
+          cd source.git
+          git push --force --all https://x-access-token:${{ secrets.GIT_PAT }}@github.com/sunwoo1256/DrumStory.git
+          git push --force --tags https://x-access-token:${{ secrets.GIT_PAT }}@github.com/sunwoo1256/DrumStory.git
