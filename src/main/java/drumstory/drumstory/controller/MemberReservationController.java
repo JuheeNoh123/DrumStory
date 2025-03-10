@@ -32,24 +32,32 @@ public class MemberReservationController {
     @PostMapping("/reservation/time")
     public ResponseEntity<ReservationDTO.ReservationTimeRes> ReservationTime(HttpServletRequest header, @RequestBody ReservationDTO.ReservationTimeReq request ) {
         Member member = memberService.tokenToMember(header);
-        ReservationDTO.ReservationTimeRes reservationTimeRes = reservationService.selectTime(member, request.getTimes(), request.getResDate());
+        ReservationDTO.ReservationTimeRes reservationTimeRes = reservationService.selectTime(member, request.getResTimeIds(), request.getResDate());
         return ResponseEntity.status(HttpStatus.OK).body(reservationTimeRes);
     }
 
     @Operation(summary = "방 선택 후 예약 처리(주희)", description = "해더에 토큰 필요",
             responses = {@ApiResponse(responseCode = "201", description = "예약 완료")})
-    @PostMapping("/reservation/room")
+    @PostMapping("/reservation/room/selected")
     public  ResponseEntity<ReservationDTO.ReservationTimeRoomRes> saveReservation(HttpServletRequest header, @RequestBody ReservationDTO.ReservationTimeRoomReq request) {
         Member member = memberService.tokenToMember(header);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.saveReservationTimeRoom(member,request.getTimes(),request.getResDate(),request.getRoomNum()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.saveReservationTimeRoom(member,request.getResTimeIds(),request.getResDate(),request.getRoomId()));
 
     }
 
     @Operation(summary = "해당 날짜에 예약 가능한 시간 조회(주희)", description = "해더에 토큰 필요",
-            responses = {@ApiResponse(responseCode = "200", description = "이미 예약 된 시간 제외하고 현재 16:10분이면 16:00부터 조회")})
+            responses = {@ApiResponse(responseCode = "200", description = "조회 성공 (이미 예약 된 시간 제외하고 현재 16:10분이면 16:00부터 조회)")})
     @PostMapping("/reservation")
     public ResponseEntity<ReservationDTO.AvailableTimesAndMember> AvailableTimes(HttpServletRequest header, @RequestBody ReservationDTO.DateReq req) {
         Member member = memberService.tokenToMember(header);
-        return ResponseEntity.status(HttpStatus.OK).body(new ReservationDTO.AvailableTimesAndMember(member.getName(), reservationService.findAvailableTimes(req.getDate())));
+        return ResponseEntity.status(HttpStatus.OK).body(new ReservationDTO.AvailableTimesAndMember(member.getName(), reservationService.findAvailableTimes(req.getResDate())));
+    }
+
+    @Operation(summary = "해당 날짜, 해당 시간에 예약 가능한 방 조회(주희)", description = "해더에 토큰 필요",
+            responses = {@ApiResponse(responseCode = "200", description = "조회 성공")})
+    @PostMapping("/reservation/room")
+    public ResponseEntity<ReservationDTO.AvailableRoomsRes> AvailableRooms(HttpServletRequest header, @RequestBody ReservationDTO.AvailableRoomsReq req) {
+        Member member = memberService.tokenToMember(header);
+        return ResponseEntity.status(HttpStatus.OK).body(new ReservationDTO.AvailableRoomsRes(member.getName(), reservationService.findAvailableRooms(req.getResDate(),req.getResTimeIds())));
     }
 }

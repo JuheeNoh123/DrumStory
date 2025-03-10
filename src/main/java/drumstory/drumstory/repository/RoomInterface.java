@@ -2,6 +2,9 @@ package drumstory.drumstory.repository;
 
 import drumstory.drumstory.domain.Room;
 
+import java.util.List;
+
 public interface RoomInterface {
-    Room findByRoomNum(String roomNum);
+    Room findById(Long roomId);
+    List<Room> findAll();
 }
