@@ -5,7 +5,6 @@ import drumstory.drumstory.domain.TimeTable;
 import drumstory.drumstory.domain.Reservation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -35,8 +34,9 @@ public class ReservationRepository implements ReservationInterface{
     }
 
     @Override
-    public List<Reservation> findAll() {
-        return em.createQuery("SELECT m FROM Reservation m", Reservation.class)
+    public List<Reservation> findAll(LocalDate resDate) {
+        return em.createQuery("SELECT r FROM Reservation r where r.resDate=:resDate", Reservation.class)
+                .setParameter("resDate", resDate)
                 .getResultList();
     }
 

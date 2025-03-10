@@ -10,6 +10,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ReservationDTO {
+    @Data
+    public static class ScheduleRes {
+        @Schema(description = "예약 가능한 시간", example = "11:30")
+        private String ava_time;
+    }
 
     @Data
     public static class ReservationTimeReq {
@@ -99,4 +104,32 @@ public class ReservationDTO {
         @Schema(description = "예약 시간 ID", example = "{1,2}")
         List<Integer> resTimeIds;
     }
+
+    @Data
+    public static class ReservationListReq {
+        @Schema(description = "예약날짜", example = "YYYY-MM-DD")
+        private LocalDate resDate;
+    }
+
+    @Data
+    public static class ReservationListRes {
+        @Schema(description = "예약 시간 리스트", example = "[\"오후 HH:MM\"]")
+        private String time;
+        @Schema(description = "이름", example = "홍길동")
+        private String name;
+        @Schema(description = "예약한 방", example = "1")
+        private String roomNum;
+        @Schema(description = "id", example = "1")
+        private long Id;
+
+        public ReservationListRes(String time, String name, String roomNum, long Id) {
+            this.time = time;
+            this.name = name;
+            this.roomNum = roomNum;
+            this.Id = Id;
+        }
+
+    }
+
+
 }

@@ -137,8 +137,15 @@ public class ReservationService {
 
 
 
-    public List<Reservation> findAll() {
-        return reservationInterface.findAll();
+    public List<ReservationDTO.ReservationListRes> findAll(LocalDate resDate) {
+        List<Reservation> reservationList = reservationInterface.findAll(resDate);
+        List<ReservationDTO.ReservationListRes> reservationInfo= new ArrayList<>();
+        for (Reservation reservation : reservationList) {
+            ReservationDTO.ReservationListRes reservationListRes = new ReservationDTO.ReservationListRes(reservation.getTime().getTimeTable(), reservation.getMember().getName(), reservation.getRoom().getRoomNum(), reservation.getId());
+            reservationInfo.add(reservationListRes);
+        }
+        return reservationInfo;
+
     }
 
     public List<TimeTable> findAvailableTimes(LocalDate resDate) {
