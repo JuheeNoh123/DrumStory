@@ -14,4 +14,6 @@ public interface TimeTableInterface {
 
 
     TimeTable findById(Integer id);
+
+    TimeTable findByTime(String time);
 }

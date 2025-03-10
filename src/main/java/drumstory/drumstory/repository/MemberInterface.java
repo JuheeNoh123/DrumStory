@@ -13,7 +13,9 @@ public interface MemberInterface {
 
     public List<Member> findAll();
 
-    void delete(Member member);
+    public Member findAdmin();
+
+    public void delete(Member member);
 
     public String getMemberName(String memberNum);
 }

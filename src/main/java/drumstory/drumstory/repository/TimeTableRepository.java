@@ -38,5 +38,11 @@ public class TimeTableRepository implements TimeTableInterface{
         return em.find(TimeTable.class, id);
     }
 
+    @Override
+    public TimeTable findByTime(String time){
+        return em.createQuery("select t from time_table t where t.timeTable=:time", TimeTable.class)
+                .setParameter("time", time)
+                .getSingleResult();
+    }
 
 }

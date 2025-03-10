@@ -1,6 +1,7 @@
 package drumstory.drumstory.repository;
 
 
+import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
 import drumstory.drumstory.domain.TimeTable;
 
@@ -22,4 +23,9 @@ public interface ReservationInterface {
 
     // 날짜와 예약 시간에 맞는 예약을 조회하는 메서드
     List<Reservation> findReservationsByDateAndTimes(LocalDate resDate, List<TimeTable> timeTables);
+
+    //해당 시간에 예약한 사람들 조회
+    List<Member> findMembersByTime(TimeTable time);
+
+    boolean checkNextReservation(TimeTable time, Member member);
 }

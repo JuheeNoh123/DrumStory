@@ -45,6 +45,19 @@ public class MemberRepository implements MemberInterface{
     }
 
     @Override
+    public Member findAdmin() {
+        RoleType roleAdmin = RoleType.ROLE_ADMIN;
+        try{
+            return em.createQuery("SELECT m FROM Member m where m.role=:roleAdmin", Member.class)
+                    .setParameter("roleAdmin", roleAdmin)
+                    .getSingleResult();
+        }
+         catch (NoResultException e) {
+            return null; // 결과가 없으면 null 반환
+        }
+    }
+
+    @Override
     public void delete(Member member) {
         em.remove(member);
     }

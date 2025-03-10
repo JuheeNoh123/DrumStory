@@ -1,14 +1,15 @@
 package drumstory.drumstory.repository;
 
+import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.TimeTable;
 import drumstory.drumstory.domain.Reservation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -75,6 +76,25 @@ public class ReservationRepository implements ReservationInterface{
         }
 
         return query.getResultList();
+    }
+
+    //해당 시간에 예약한 사람들 조회
+    @Override
+    public List<Member> findMembersByTime(TimeTable time){
+        return em.createQuery("select r.member from Reservation r where r.time = :time", Member.class)
+                .setParameter("time", time)
+                .getResultList();
+    }
+
+    @Override
+    public boolean checkNextReservation(TimeTable time, Member member){
+        List<Reservation> result = em.createQuery(
+                        "SELECT r FROM Reservation r WHERE r.time = :time AND r.member = :member", Reservation.class)
+                .setParameter("time", time)
+                .setParameter("member", member)
+                .getResultList();  // 결과가 없으면 빈 리스트 반환
+
+        return !result.isEmpty();  // 리스트가 비어있지 않으면 true 반환
     }
 
 
