@@ -64,7 +64,7 @@ public class MemberReservationController {
     @Operation(summary = "예약 취소(선우)", description = "해더에 토큰 필요",
             responses = {@ApiResponse(responseCode = "204", description = "취소 성공")})
     @DeleteMapping("/reservation/delete")
-    public ResponseEntity<Void> DeleteReservation(HttpServletRequest header) {
+    public ResponseEntity<Void> DeleteReservation(HttpServletRequest header) throws Exception {
         Member member = memberService.tokenToMember(header);
         reservationService.deleteReservation(member);
         return ResponseEntity.noContent().build(); // 204 No Content
