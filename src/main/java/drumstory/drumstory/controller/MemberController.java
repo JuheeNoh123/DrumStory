@@ -20,7 +20,7 @@ public class MemberController {
             responses = {@ApiResponse(responseCode = "200", description = "로그인 성공"),
                     @ApiResponse(responseCode = "400", description = "잘못된 ID")})
     @PostMapping("/login")
-    public ResponseEntity<MemberDTO.ResponseLogin> login(@RequestBody MemberDTO.MemberInfo request) {
+    public ResponseEntity<MemberDTO.ResponseLogin> login(@RequestBody MemberDTO.MemberInfo request) throws Exception {
         return ResponseEntity.status(HttpStatus.OK).body(memberService.login(request));
     }
 
