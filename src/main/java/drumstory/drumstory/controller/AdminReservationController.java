@@ -31,4 +31,6 @@ public class AdminReservationController {
     public List<ReservationDTO.ReservationListRes> getAllReservations(@RequestBody ReservationDTO.ReservationListReq req){
         return reservationService.findAll(req.getResDate());
     }
+
+
 }

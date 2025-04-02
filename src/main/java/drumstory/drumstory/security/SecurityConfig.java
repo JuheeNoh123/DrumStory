@@ -31,7 +31,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))       // CORS 설정
                 .authorizeHttpRequests((authorize) -> authorize
 //                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI와 API 문서화 경로에 대한 접근을 모든 사용자에게 허용
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/todayReservation").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/reservation/**").hasAnyRole("ADMIN", "MEMBER")
                         .anyRequest().permitAll()
                 )
