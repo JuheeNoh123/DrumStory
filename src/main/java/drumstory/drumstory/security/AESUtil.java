@@ -19,7 +19,8 @@ public class AESUtil {
 
     @PostConstruct // ✅ Spring이 빈을 초기화한 후 실행됨
     public void init() {
-        SECRET_KEY = secret.getBytes(); // ✅ 이제 secret 값이 정상적으로 들어감!
+        SECRET_KEY = Base64.getDecoder().decode(secret);
+         // ✅ 이제 secret 값이 정상적으로 들어감!
     }
 
     // 암호화
