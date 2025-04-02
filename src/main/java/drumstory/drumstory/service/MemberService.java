@@ -26,7 +26,7 @@ public class MemberService {
     private final JwtUtility jwtUtility;
     private final ReservationService reservationService;
 
-    public Member tokenToMember(HttpServletRequest request) {
+    public Member tokenToMember(HttpServletRequest request) throws Exception {
         Member member = findByMemberNum(jwtUtility.getMemberNum(jwtUtility.resolveToken(request)));
         if (member != null) {
             return member;
@@ -39,7 +39,7 @@ public class MemberService {
         return memberInterface.findByMemberNum(memberNum);
     }
 
-    public MemberDTO.ResponseLogin login(MemberDTO.MemberInfo request){
+    public MemberDTO.ResponseLogin login(MemberDTO.MemberInfo request) throws Exception {
         Member member = findByMemberNum(request.getMemberNum());
         if (member == null) {
             throw new UnregisteredMemberIdException("등록되지 않은 ID 입니다.", HttpStatus.BAD_REQUEST);

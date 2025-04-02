@@ -9,7 +9,6 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.security.Key;
 import java.util.Date;
 
 @Service
@@ -23,9 +22,10 @@ public class JwtUtility {
 //    }
 
     // JWT 생성
-    public String generateToken(String memberId) {
+    public String generateToken(String memberId) throws Exception {
+        String encryptedSub = AESUtil.encrypt(memberId);
         return "Bearer " + Jwts.builder()
-                .setSubject(memberId)
+                .setSubject(encryptedSub)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secret)
@@ -33,14 +33,15 @@ public class JwtUtility {
     }
 
     // JWT 클레임 반환
-    public String getMemberNum(String token) {
+    public String getMemberNum(String token) throws Exception {
         // 토큰 파싱 및 클레임 반환
-        return Jwts.parser()
+        String encryptedSub =  Jwts.parser()
                 .setSigningKey(secret)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject(); // 유효한 경우, 클레임 반환
+        return AESUtil.decrypt(encryptedSub);  // 🔓 복호화
     }
 
     // JWT 유효성 검증
