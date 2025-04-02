@@ -14,6 +14,7 @@ public interface ReservationInterface {
 
     void saveReservation(Reservation reservation);
 
+    List<Reservation> findReservationByMember(Member member);
 
     List<Reservation> findByResDate(LocalDate resDate);
 
@@ -30,4 +31,6 @@ public interface ReservationInterface {
     List<Reservation> findAll(LocalDate resDate);
 
     void deletePastReservations(LocalDate currentDate, int timeTableId);
+
+    boolean deleteReservationByMember(Member member);
 }

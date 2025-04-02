@@ -1,7 +1,10 @@
 package drumstory.drumstory.service;
 
 import drumstory.drumstory.DTO.MemberDTO;
+import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
+import drumstory.drumstory.domain.Reservation;
+import drumstory.drumstory.exception.ReservateException;
 import drumstory.drumstory.exception.UnregisteredMemberIdException;
 import drumstory.drumstory.repository.MemberInterface;
 import drumstory.drumstory.repository.ReservationInterface;
@@ -9,7 +12,11 @@ import drumstory.drumstory.security.JwtUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +24,7 @@ public class MemberService {
     private final MemberInterface memberInterface;
     private final ReservationInterface reservationInterface;
     private final JwtUtility jwtUtility;
+    private final ReservationService reservationService;
 
     public Member tokenToMember(HttpServletRequest request) {
         Member member = findByMemberNum(jwtUtility.getMemberNum(jwtUtility.resolveToken(request)));
@@ -36,7 +44,24 @@ public class MemberService {
         if (member == null) {
             throw new UnregisteredMemberIdException("등록되지 않은 ID 입니다.", HttpStatus.BAD_REQUEST);
         }
-        return new MemberDTO.ResponseLogin(jwtUtility.generateToken(member.getMemberNum()), member.getRole());
+        List<Reservation> reservationList = reservationInterface.findReservationByMember(member);
+        String token = jwtUtility.generateToken(member.getMemberNum());
+
+        if (!reservationList.isEmpty()) {
+            List<Integer> resTimeIds = new ArrayList<>();
+
+            for (Reservation reservation : reservationList) {
+                resTimeIds.add(reservation.getTime().getId());
+            }
+            ReservationDTO.ReservationTimeRes reservationTimeRes  = reservationService.selectTime(member,resTimeIds, String.valueOf(reservationList.getFirst().getResDate()));
+            return new MemberDTO.ResponseLogin(token,member.getRole(),reservationTimeRes);
+        }
+        else{
+            return new MemberDTO.ResponseLogin(token,member.getRole(),null);
+        }
+
+
     }
+
 
 }

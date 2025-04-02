@@ -27,6 +27,14 @@ public class ReservationRepository implements ReservationInterface{
     }
 
     @Override
+    public List<Reservation> findReservationByMember(Member member) {
+        return em.createQuery("Select r from Reservation r where r.member = :member", Reservation.class)
+                .setParameter("member", member)
+                .getResultList();
+
+    }
+
+    @Override
     public TimeTable getTimeTableByTime(String reservationTime) {
         return em.createQuery("select t from time_table t where t.timeTable = :reservationTime", TimeTable.class)
                 .setParameter("reservationTime", reservationTime)
@@ -104,6 +112,14 @@ public class ReservationRepository implements ReservationInterface{
                 .setParameter("currentDate", currentDate)
                 .setParameter("timeTableId", timeTableId)
                 .executeUpdate();
+    }
+
+    @Override
+    public boolean deleteReservationByMember(Member member) {
+        em.createQuery("delete from Reservation r where r.member = :member")
+                .setParameter("member", member)
+                .executeUpdate();
+        return true;
 
     }
 

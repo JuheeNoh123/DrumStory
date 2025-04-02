@@ -12,9 +12,13 @@ public class MemberDTO {
         @Schema(description = "권한", example = "ROLE_ADMIN")
         private RoleType role;
 
-        public ResponseLogin(String accessToken, RoleType role) {
+        @Schema(description = "예약정보가 없으면 null, 있으면 예약정보 리스트 반환", example = "null")
+        private ReservationDTO.ReservationTimeRes reservationInfo;
+
+        public ResponseLogin(String accessToken, RoleType role, ReservationDTO.ReservationTimeRes reservationInfo) {
             this.accessToken = accessToken;
             this.role = role;
+            this.reservationInfo = reservationInfo;
         }
     }
 

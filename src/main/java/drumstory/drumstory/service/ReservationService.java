@@ -35,6 +35,9 @@ public class ReservationService {
 
 
     public ReservationDTO.ReservationTimeRes selectTime(Member member, List<Integer> resTimeIds, String date){
+//        if (!reservationInterface.findReservationByMember(member)){
+//            throw new ReservateException("이미 예약한 내역이 존재합니다.", HttpStatus.BAD_REQUEST);
+//        }
         LocalDate resDate = LocalDate.parse(date);
         if (resTimeIds.size() > 2) {
             throw new ReservateException("최대 두 개의 시간만 선택할 수 있습니다.", HttpStatus.BAD_REQUEST);
@@ -81,6 +84,7 @@ public class ReservationService {
     //방정보 받아서 예약 진행
     @Transactional
     public ReservationDTO.ReservationTimeRoomRes saveReservationTimeRoom(Member member, List<Integer> resTimeIds, String date, Long roomId) {
+
         LocalDate resDate = LocalDate.parse(date);
         String day = resDate.getDayOfWeek().toString();
         Room room = roomInterface.findById(roomId);
@@ -234,7 +238,7 @@ public class ReservationService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0/30 * * * *") // 매 시간 0분, 30분마다 실행
+    @Scheduled(cron = "0 0/30 * * * *", zone = "Asia/Seoul") // 매 시간 0분, 30분마다 실행
     public void cleanUpExpiredReservations() {
         LocalDate currentDate = LocalDate.now();
         LocalTime currentTime = LocalTime.now();
@@ -252,5 +256,11 @@ public class ReservationService {
         reservationInterface.deletePastReservations(currentDate, timeTableId);
 
     }
+    @Transactional
+    public void deleteReservation(Member member) {
+        reservationInterface.deleteReservationByMember(member);
+    }
+
+
 
 }
