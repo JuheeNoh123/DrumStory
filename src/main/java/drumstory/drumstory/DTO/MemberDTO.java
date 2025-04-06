@@ -11,21 +11,16 @@ public class MemberDTO {
         private String accessToken;
         @Schema(description = "권한", example = "ROLE_ADMIN")
         private RoleType role;
+        @Schema(description = "이름", example = "홍길동")
         private String name;
         @Schema(description = "예약정보가 없으면 null, 있으면 예약정보 리스트 반환", example = "null")
-        private ReservationDTO.ReservationTimeRes reservationInfo;
+        private ReservationDTO.ReservationTimeRoomRes reservationInfo;
 
-        public ResponseLogin(String accessToken, RoleType role, ReservationDTO.ReservationTimeRes reservationInfo, String name) {
+        public ResponseLogin(String accessToken, RoleType role, ReservationDTO.ReservationTimeRoomRes reservationInfo, String name) {
             this.accessToken = accessToken;
             this.role = role;
             this.reservationInfo = reservationInfo;
             this.name = name;
-        }
-
-        public ResponseLogin(String accessToken, RoleType role, ReservationDTO.ReservationTimeRes reservationInfo) {
-            this.accessToken = accessToken;
-            this.role = role;
-            this.reservationInfo = reservationInfo;
 
         }
     }

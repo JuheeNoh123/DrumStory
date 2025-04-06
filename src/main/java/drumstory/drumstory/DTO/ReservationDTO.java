@@ -40,6 +40,7 @@ public class ReservationDTO {
         @Schema(description = "예약요일", example = "Monday")
         private String resDay;
 
+
     }
 
     @Data

@@ -49,15 +49,18 @@ public class MemberService {
 
         if (!reservationList.isEmpty()) {
             List<Integer> resTimeIds = new ArrayList<>();
-
+            String roomNum = reservationList.getFirst().getRoom().getRoomNum();
             for (Reservation reservation : reservationList) {
                 resTimeIds.add(reservation.getTime().getId());
             }
             ReservationDTO.ReservationTimeRes reservationTimeRes  = reservationService.selectTime(member,resTimeIds, String.valueOf(reservationList.getFirst().getResDate()));
-            return new MemberDTO.ResponseLogin(token,member.getRole(),reservationTimeRes);
+            ReservationDTO.ReservationTimeRoomRes  reservationTimeRoomRes = new ReservationDTO.ReservationTimeRoomRes(member.getName(),
+                    reservationTimeRes.getStartTime(),reservationTimeRes.getEndTime(),reservationTimeRes.getResDate(),
+                    reservationTimeRes.getResDay(),roomNum);
+            return new MemberDTO.ResponseLogin(token,member.getRole(),reservationTimeRoomRes, member.getName());
         }
         else{
-            return new MemberDTO.ResponseLogin(token,member.getRole(),null, member.getName());
+            return new MemberDTO.ResponseLogin(token,member.getRole(),null,member.getName());
         }
 
 
