@@ -57,7 +57,7 @@ public class MemberService {
             return new MemberDTO.ResponseLogin(token,member.getRole(),reservationTimeRes);
         }
         else{
-            return new MemberDTO.ResponseLogin(token,member.getRole(),null);
+            return new MemberDTO.ResponseLogin(token,member.getRole(),null, member.getName());
         }
 
 
