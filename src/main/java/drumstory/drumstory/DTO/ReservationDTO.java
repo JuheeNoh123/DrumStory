@@ -77,8 +77,6 @@ public class ReservationDTO {
         LocalDate resDate;
     }
 
-
-
     @Data
     @AllArgsConstructor
     public static class AvailableTimesAndMember{
@@ -132,15 +130,9 @@ public class ReservationDTO {
 
     }
 
-
     @Data
     public static class DeleteReservationReq {
-        @Schema(description = "회원ID", example = "1234")
-        private String memberNum;
-
+        @Schema(description = "ID", example = "1")
+        private long Id;
     }
-
-
-
-
 }

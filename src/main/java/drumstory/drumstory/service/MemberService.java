@@ -62,8 +62,10 @@ public class MemberService {
         else{
             return new MemberDTO.ResponseLogin(token,member.getRole(),null,member.getName());
         }
+    }
 
-
+    public Member findById(long id) {
+        return memberInterface.findById(id);
     }
 
 
