@@ -134,22 +134,10 @@ public class ReservationDTO {
 
 
     @Data
-    public static class DeleteReservationRes {
-        @Schema(description = "예약 시간 리스트", example = "[\"오후 HH:MM\"]")
-        private String time;
-        @Schema(description = "이름", example = "홍길동")
-        private String name;
-        @Schema(description = "예약한 방", example = "1")
-        private String roomNum;
-        @Schema(description = "id", example = "1")
-        private long Id;
+    public static class DeleteReservationReq {
+        @Schema(description = "회원ID", example = "1234")
+        private String memberNum;
 
-        public DeleteReservationRes(String time, String name, String roomNum, long Id) {
-            this.time = time;
-            this.name = name;
-            this.roomNum = roomNum;
-            this.Id = Id;
-        }
     }
 
 

@@ -5,15 +5,15 @@ import drumstory.drumstory.DTO.ReservationDTO;
 import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.Reservation;
 import drumstory.drumstory.service.AdminMemberService;
+import drumstory.drumstory.service.MemberService;
 import drumstory.drumstory.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @Tag(name = "관리자 예약 관리 페이지")
 public class AdminReservationController {
 
-    private final AdminMemberService adminMemberService;
+    private final MemberService memberService;
     private final ReservationService reservationService;
 
     @Operation(summary = "예약 조회(선우)", description = "토큰 필요",
@@ -30,6 +30,15 @@ public class AdminReservationController {
     @PostMapping("/admin/reservation")
     public List<ReservationDTO.ReservationListRes> getAllReservations(@RequestBody ReservationDTO.ReservationListReq req){
         return reservationService.findAll(req.getResDate());
+    }
+
+    @Operation(summary = "관리자 예약 취소(선우)", description = "헤더에 토큰 필요",
+            responses = {@ApiResponse(responseCode = "204", description = "취소 성공")})
+    @DeleteMapping("/admin/reservation/delete")
+    public ResponseEntity<Void> adminDeleteReservation(@RequestBody ReservationDTO.DeleteReservationReq req) throws Exception {
+        Member member = memberService.findByMemberNum(req.getMemberNum());
+        reservationService.deleteReservation(member);
+        return ResponseEntity.noContent().build(); // 204 No Content
     }
 
 
