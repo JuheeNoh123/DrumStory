@@ -5,7 +5,7 @@ import drumstory.drumstory.domain.Member;
 import java.util.List;
 
 public interface MemberInterface {
-    public Member findById(Long Id);
+    public Member findById(long Id);
 
     public Member findByMemberNum(String memberNum);
 

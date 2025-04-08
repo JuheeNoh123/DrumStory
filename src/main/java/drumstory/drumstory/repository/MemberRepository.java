@@ -14,8 +14,14 @@ import java.util.List;
 public class MemberRepository implements MemberInterface{
     private final EntityManager em;
     @Override
-    public Member findById(Long Id) {
-        return em.find(Member.class, Id);
+    public Member findById(long Id) {
+        try {
+            return em.createQuery("SELECT m FROM Member m WHERE m.id = :id", Member.class)
+                    .setParameter("id", Id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null; // 결과가 없으면 null 반환
+        }
     }
 
     @Override
