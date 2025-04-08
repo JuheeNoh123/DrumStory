@@ -33,4 +33,8 @@ public interface ReservationInterface {
     void deletePastReservations(LocalDate currentDate, int timeTableId);
 
     boolean deleteReservationByMember(Member member);
+
+    Reservation findById(long Id);
+
+    void deleteReservationById(long Id);
 }

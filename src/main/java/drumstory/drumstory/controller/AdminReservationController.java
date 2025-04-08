@@ -36,8 +36,8 @@ public class AdminReservationController {
             responses = {@ApiResponse(responseCode = "204", description = "취소 성공")})
     @DeleteMapping("/admin/reservation/delete")
     public ResponseEntity<Void> adminDeleteReservation(@RequestBody ReservationDTO.DeleteReservationReq req) throws Exception {
-        Member member = memberService.findById(req.getId());
-        reservationService.deleteReservation(member);
+        Reservation reservation = reservationService.findReservationById(req.getId());
+        reservationService.adminDeleteReservation(reservation);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
 }

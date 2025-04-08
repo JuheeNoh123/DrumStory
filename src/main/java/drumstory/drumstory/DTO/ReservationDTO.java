@@ -132,7 +132,7 @@ public class ReservationDTO {
 
     @Data
     public static class DeleteReservationReq {
-        @Schema(description = "id", example = "1")
+        @Schema(description = "예약id", example = "952")
         private long Id;
     }
 }

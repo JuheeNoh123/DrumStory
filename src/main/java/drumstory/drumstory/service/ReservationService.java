@@ -258,5 +258,14 @@ public class ReservationService {
         reservationInterface.deleteReservationByMember(member);
     }
 
+    public Reservation findReservationById(long id) {
+        return reservationInterface.findById(id);
+    }
+
+    @Transactional
+    public void adminDeleteReservation(Reservation reservation) {
+        reservationInterface.deleteReservationById(reservation.getId());
+    }
+
 
 }

@@ -4,6 +4,7 @@ import drumstory.drumstory.domain.Member;
 import drumstory.drumstory.domain.TimeTable;
 import drumstory.drumstory.domain.Reservation;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -121,6 +122,24 @@ public class ReservationRepository implements ReservationInterface{
                 .executeUpdate();
         return true;
 
+    }
+
+    @Override
+    public Reservation findById(long Id) {
+        try {
+            return em.createQuery("SELECT r FROM Reservation r WHERE r.id = :id", Reservation.class)
+                    .setParameter("id", Id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null; // 결과가 없으면 null 반환
+        }
+    }
+
+    @Override
+    public void deleteReservationById(long Id) {
+        em.createQuery("delete from Reservation r where r.id = :id")
+                .setParameter("id", Id)
+                .executeUpdate();
     }
 
 
